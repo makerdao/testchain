@@ -11,7 +11,7 @@ SEED_WORDS="hill law jazz limb penalty escape public dish stand bracket blue jar
 # If 'fast' is passed as last arg, set the SKIP_BUILD_IF_ALREADY_BUILT and
 # SKIP_SUBMODULE_UPDATE env variables for many speed, much fast, very impress
 if [[ "${@:$#}" == 'fast' ]]; then
-  
+
   export SKIP_BUILD_IF_ALREADY_BUILT=1
   export SKIP_SUBMODULE_UPDATE=1
   set -- "${@:1:$(($#-1))}" # Pop last arg
@@ -64,8 +64,8 @@ fi
 if [[ "$1" != '--ci' ]]; then
   # The testnet will continue to run with its deployed contracts
   # until the user confirms it should shut down.
-  $@
-  bash $CWD/confirm-kill-testnet
+  echo "Press Ctrl-C to stop the testnet"
+  while true; do read; done
 else
   # Proceed to the command given as arguments (but strip --ci as first param).
   $(echo "$@" | sed 's/^\-\-ci //')
