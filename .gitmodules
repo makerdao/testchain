@@ -1,0 +1,18 @@
+[submodule "lib/ds-test"]
+	path = lib/ds-test
+	url = https://github.com/dapphub/ds-test
+[submodule "lib/sai"]
+	path = lib/sai
+	url = https://github.com/makerdao/sai
+[submodule "lib/maker-otc"]
+	path = lib/maker-otc
+	url = https://github.com/makerdao/maker-otc
+[submodule "lib/ds-proxy"]
+	path = lib/ds-proxy
+	url = https://github.com/dapphub/ds-proxy
+[submodule "lib/sai-proxy"]
+	path = lib/sai-proxy
+	url = https://github.com/makerdao/sai-proxy
+[submodule "lib/proxy-registry"]
+	path = lib/proxy-registry
+	url = https://github.com/makerdao/proxy-registry
