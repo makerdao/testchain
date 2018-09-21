@@ -2,6 +2,8 @@
 
 This tool will help you set up a local testchain and deploy the contracts you need to work with Maker apps.
 
+This branch, `dai.js`, is configured with the contracts needed for the [Dai.js](https://github.com/makerdao/dai.js) library.
+
 ## Installation and requirements
 
 Requires Node.js and Bash.
