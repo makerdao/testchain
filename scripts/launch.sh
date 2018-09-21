@@ -15,6 +15,8 @@ CWD="${0%/*}"
 LIB=$CWD/../lib
 VAR=$CWD/../var
 
+mkdir -p $VAR
+
 if [ ! "$deploy" ]; then
   echo "Using chaindata stored on disk."
   if [ "$chaindata" ]; then
