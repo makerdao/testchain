@@ -2,12 +2,13 @@
 set -e
 
 # parse arguments
-endargs=()
+otherargs=()
 while [[ "$#" > 0 ]]; do case $1 in
+  -c|--chaindata) chaindata="$2"; shift;;
+  --ci) ci=1;;
   -d|--deploy) deploy=1;;
   -f|--fast) fast=1;;
-  -c|--chaindata) chaindata="$2"; shift;;
-  *) endargs+=($1);;
+  *) otherargs+=($1);;
 esac; shift; done
 
 START_TIME=`date +%s`
@@ -82,12 +83,12 @@ else
 fi
 
 
-if [[ "$1" != '--ci' ]]; then
+if [ "$ci" ]; then
+  # Proceed to the command given
+  ${otherargs[@]}
+else
   # The testnet will continue to run with its deployed contracts
   # until the user confirms it should shut down.
   echo "Press Ctrl-C to stop the testnet"
   while true; do read; done
-else
-  # Proceed to the command given as arguments (but strip --ci as first param).
-  $(echo "$@" | sed 's/^\-\-ci //')
 fi
