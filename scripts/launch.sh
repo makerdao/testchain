@@ -22,6 +22,10 @@ if [ ! "$deploy" ]; then
     rm -rf $VAR/chaindata
     cp -r $CWD/../chaindata/$chaindata $VAR/chaindata
   fi
+
+  if [ ! -e $VAR/chaindata ]; then
+    cp -r $CWD/../chaindata/default $VAR/chaindata
+  fi
 fi
 
 if [ $fast ]; then
