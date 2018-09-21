@@ -23,17 +23,15 @@ esac; shift; done
 if ! nc -z 127.0.0.1 $PORT; then
   mkdir -p $VAR
 
-  if [ ! "$deploy" ]; then
-    if [ "$snapshot" ]; then
-      echo "Loading snapshots/$snapshot."
-      rm -rf $VAR/chaindata
-      cp -r $CWD/../snapshots/$snapshot $VAR/chaindata
-    elif [ ! -e $VAR/chaindata ]; then
-      echo "Loading snapshots/default."
-      cp -r $CWD/../snapshots/default $VAR/chaindata
-    else
-      echo "Using existing chaindata on disk."
-    fi
+  if [ "$snapshot" ]; then
+    echo "Loading snapshots/$snapshot."
+    rm -rf $VAR/chaindata
+    cp -r $CWD/../snapshots/$snapshot $VAR/chaindata
+  elif [ ! -e $VAR/chaindata ]; then
+    echo "Loading snapshots/default."
+    cp -r $CWD/../snapshots/default $VAR/chaindata
+  else
+    echo "Using existing chaindata on disk."
   fi
 
   if [ $fast ]; then
@@ -54,17 +52,23 @@ if ! nc -z 127.0.0.1 $PORT; then
   export ETH_RPC_URL=http://127.1:$PORT
 
   # Start a testnet on port
-  echo "Starting ganache-cli..."
+  echo "Starting Ganache..."
   ./node_modules/.bin/ganache-cli -i 999 -p $PORT -a 1000 \
     -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
     --db $VAR/chaindata \
     > $VAR/ganache.out 2>&1 & netpid=$!
 
+  # Wait for the testnet to become responsive
+  until curl -s -o/dev/null "$ETH_RPC_URL"; do
+    sleep 1
+    if [ -z "$(ps -p $netpid -o pid=)" ]; then
+      echo "Ganache stopped running. Check var/ganache.out for errors."
+      exit 1
+    fi
+  done
+
   # Stop the testnet when this script exits
   trap "kill $netpid" EXIT
-
-  # Wait for the testnet to become responsive
-  until curl -s -o/dev/null "$ETH_RPC_URL"; do sleep 1; done
 
   # Finish configuring seth with settings from running testnet
   export ETH_FROM=$(seth rpc eth_coinbase)
@@ -74,7 +78,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     if [ "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
       echo "Skipping build of dapps that are already built."
     fi
-    $CWD/deploy.sh
+    $CWD/deploy
   fi
 
   END_TIME=`date +%s`
