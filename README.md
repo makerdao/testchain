@@ -24,7 +24,7 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 
 * `-d, --deploy`: Optional. If set, `scripts/deploy.sh` will be run once Ganache is set up, to deploy contracts to the test chain.
 
-* `--fast`: Skip `git submodule update` and skip running `dapp build` for dapps that are already built. This is accomplished by setting the `SKIP_BUILD_IF_ALREADY_BUILT` environment variable, so the dapp build scripts must be written to support it.
+* `--fast`: Skip `git submodule update` and skip running `dapp build` for dapps that are already built. This is accomplished by setting the `SKIP_BUILD_IF_ALREADY_BUILT` environment variable, so the dapp build scripts must be written (or modified; see the use of `sed_inplace` in `deploy.sh`) to support it.
 
 * `-p, --port`: Start Ganache on a different port.
 
