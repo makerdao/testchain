@@ -2,7 +2,7 @@
 
 This tool will help you set up a local testchain and deploy the contracts you need to work with Maker apps.
 
-This branch, `dai.js`, is configured with the contracts needed for the [Dai.js](https://github.com/makerdao/dai.js) library.
+This branch, `mcd`, is configured for the Multi-Collateral Dai contracts. Its `default` snapshot contains both a deployment of those contracts and the ones required for the Single-Collateral Dai system.
 
 ## Installation and requirements
 
