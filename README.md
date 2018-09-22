@@ -28,7 +28,7 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 
 * `-p, --port`: Start Ganache on a different port.
 
-* `--ci`: If this is set, all unrecognized arguments will be treated as a new command. This command will be run, and Ganache will exit afterward.
+* `--ci`: If this is set, all unrecognized arguments will be treated as a new command. This command will be run once the test chain is up, and Ganache will exit afterward.
 
 ## Deploying changes to contract code
 
