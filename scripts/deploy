@@ -45,3 +45,5 @@ cat > $OUT/addresses.json <<- EOM
   "MCD_SPOT_REP": "$MCD_SPOT_REP"
 }
 EOM
+
+$CWD/collect-abis
