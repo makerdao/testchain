@@ -16,4 +16,7 @@ $OUT
 
 ls $LIB/sai/out/*.abi | \
   grep -v -E "(Fab|Dev|Test)" | \
-  xargs sh -c "cp \$@ $OUT"
+  xargs sh -c "cp \$@ $OUT" placeholder
+
+# for an explanation of the placeholder arg above, see:
+# https://en.wikipedia.org/wiki/Xargs#Shell_trick
