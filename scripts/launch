@@ -53,7 +53,7 @@ if ! nc -z 127.0.0.1 $PORT; then
 
   # Start a testnet on port
   echo "Starting Ganache..."
-  ./node_modules/.bin/ganache-cli -i 999 -p $PORT -a 1000 \
+  ./node_modules/.bin/ganache-cli --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
     -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
     --db $VAR/chaindata \
     > $VAR/ganache.out 2>&1 & netpid=$!
