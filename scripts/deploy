@@ -106,6 +106,21 @@ echo "Deployed SaiProxyCreateAndExecute to $SAI_PROXY"
 cd -
 
 ############################
+# build oasis proxy
+
+cd $LIB/oasis-direct-proxy
+if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyCreationAndExecute.abi ]; then
+  echo "Skipping dapp build for oasis-direct-proxy (already built)"
+else
+  echo "Building oasis-direct-proxy..."
+  dapp build 2> /dev/null
+fi
+echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
+OASIS_PROXY=$(dapp create ProxyCreationAndExecute)
+echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
+cd -
+
+############################
 # store outputs for apps to use
 
 mkdir -p $OUT
@@ -132,6 +147,7 @@ cat > $OUT/addresses.json <<- EOM
   "PROXY_REGISTRY": "$PROXY_REGISTRY",
   "DS_PROXY": "$DS_PROXY",
   "SAI_PROXY": "$SAI_PROXY"
+  "OASIS_PROXY": "$OASIS_PROXY"
 }
 EOM
 
