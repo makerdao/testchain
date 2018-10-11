@@ -4,6 +4,20 @@ set -e
 CWD="${0%/*}"
 LIB=$CWD/../lib
 OUT=$CWD/../out
+OUTPUT_FORMAT=json
+PORT=2000
+
+# parse arguments
+while [[ "$#" > 0 ]]; do case $1 in
+  -o|--output) OUTPUT_FORMAT="$2"; shift;;
+  -p|--port) PORT="$2"; shift;;
+esac; shift; done
+
+# Pre check output format before doing something
+if ! [[ "$OUTPUT_FORMAT" =~ ^(json|env|yaml|yml)$ ]]; then
+  echo "output format $OUTPUT_FORMAT is not supported"
+  exit 1
+fi
 
 function sed_inplace {
   # sed's -i argument behaves differently on macOS, hence this hack
@@ -110,29 +124,19 @@ cd -
 
 mkdir -p $OUT
 
-cat > $OUT/addresses.json <<- EOM
-{
-  "GEM": "$SAI_GEM",
-  "GOV": "$SAI_GOV",
-  "PIP": "$SAI_PIP",
-  "PEP": "$SAI_PEP",
-  "PIT": "$SAI_PIT",
-  "ADM": "$SAI_ADM",
-  "SAI": "$SAI_SAI",
-  "SIN": "$SAI_SIN",
-  "SKR": "$SAI_SKR",
-  "DAD": "$SAI_DAD",
-  "MOM": "$SAI_MOM",
-  "VOX": "$SAI_VOX",
-  "TUB": "$SAI_TUB",
-  "TAP": "$SAI_TAP",
-  "TOP": "$SAI_TOP",
-  "MAKER_OTC": "$OTC",
-  "DS_PROXY_FACTORY": "$DS_PROXY_FACTORY",
-  "PROXY_REGISTRY": "$PROXY_REGISTRY",
-  "DS_PROXY": "$DS_PROXY",
-  "SAI_PROXY": "$SAI_PROXY"
-}
-EOM
+# Output functions file
+source $CWD/output
+
+case "$OUTPUT_FORMAT" in
+  json)
+    write_json "$OUT/addresses.json"
+    ;;
+  yaml|yml)
+    write_yaml "$OUT/addresses.yaml"
+    ;;
+  env)
+    write_env "$OUT/addresses"
+    ;;
+esac
 
 $CWD/collect-abis.sh
