@@ -139,4 +139,4 @@ case "$OUTPUT_FORMAT" in
     ;;
 esac
 
-$CWD/collect-abis.sh
+$CWD/collect-abis
