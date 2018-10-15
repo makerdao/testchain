@@ -208,6 +208,7 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_FLIP_REP}}/$MCD_FLIP_REP/g" $1
   sed -i -e "s/{{TESTCHAIN_SPOT_REP}}/$MCD_SPOT_REP/g" $1
 
+  # For osx `sed -i -e` will create new file $1-e and we have to remove it.
   if [ -f "$1-e" ]; then
     rm -f "$1-e"
   fi
