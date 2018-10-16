@@ -32,7 +32,7 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 
 * `-o, --output`: Works only with `-d`. Will export deployed contracts to specified format. Available formats are: `json|env|yaml|template`
 
-* `--template`: Output configuration template. See (deployment output section)[#deploying-changes-to-contract-code].
+* `--template`: Output configuration template. See [deployment output section](#deploying-changes-to-contract-code).
 
 ## Deploying changes to contract code
 
