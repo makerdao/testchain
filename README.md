@@ -36,18 +36,18 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 
 ## Deploying changes to contract code
 
-When the deploy script is run, it copies ABI files and output addresses of deployment contracts to file in `out/` directory. These can be copied into the source code of applications working with the test chain as you see fit.
+When the deploy script is run, it copies ABI files and output addresses of deployment contracts to a file in `out/` directory. These can be copied into the source code of applications working with the test chain as you see fit.
 
-This output file can be in different format depending on `-o, --output` option.
+This output file can be in different formats depending on `-o, --output` option.
 
  * `-o json` - creates `out/addresses.json` file in JSON format
- * `-o env` - creates `out/addresses` file with bash script that setting variables to ENV params.
+ * `-o env` - creates `out/addresses` file with bash script that exports the addresses as environment variables
  * `-o yaml` - creates `out/addresses.yaml` file in YAML format
  * `-o path/to/output/config.any --template path/to/config.template` - will copy config file to `path/to/output/config.any` and replace all placeholders there.
 
 ### Configuration file template
 
-If you need to configure your application using custom config file you could do this using config template.
+If you need to configure your application using a custom config file you could do this using config template.
 
 1. Create config template file somewhere ex: `your/project/path/config/local.template` with this content:
 ```
@@ -76,40 +76,42 @@ If such file already exist, script will ask you to delete it first.
 
 ### Testchain template variables
 
-`TESTCHAIN_HOST` - host. default to `127.0.0.1`
-`TESTCHAIN_PORT` - testchain port. default to `2000`
-`TESTCHAIN_DEPLOY` - contract address
-`TESTCHAIN_GOV` - contract address
-`TESTCHAIN_VAT` - contract address
-`TESTCHAIN_PIT` - contract address
-`TESTCHAIN_DRIP` - contract address
-`TESTCHAIN_CAT` - contract address
-`TESTCHAIN_VOW` - contract address
-`TESTCHAIN_MCD` - contract address
-`TESTCHAIN_JOIN_DAI` - contract address
-`TESTCHAIN_MOVE_DAI` - contract address
-`TESTCHAIN_FLAP` - contract address
-`TESTCHAIN_FLOP` - contract address
-`TESTCHAIN_MOM` - contract address
-`TESTCHAIN_DAI` - contract address
-`TESTCHAIN_DAI_GUARD` - contract address
-`TESTCHAIN_DGX` - contract address
-`TESTCHAIN_JOIN_DGX` - contract address
-`TESTCHAIN_MOVE_DGX` - contract address
-`TESTCHAIN_FLIP_DGX` - contract address
-`TESTCHAIN_SPOT_DGX` - contract address
-`TESTCHAIN_PIP_DGX` - contract address
-`TESTCHAIN_PIP_ETH` - contract address
-`TESTCHAIN_JOIN_ETH` - contract address
-`TESTCHAIN_MOVE_ETH` - contract address
-`TESTCHAIN_FLIP_ETH` - contract address
-`TESTCHAIN_SPOT_ETH` - contract address
-`TESTCHAIN_REP` - contract address
-`TESTCHAIN_PIP_REP` - contract address
-`TESTCHAIN_JOIN_REP` - contract address
-`TESTCHAIN_MOVE_REP` - contract address
-`TESTCHAIN_FLIP_REP` - contract address
-`TESTCHAIN_SPOT_REP` - contract address
+| Name | Description | Default value |
+| ---- | ----------- | ------------- |
+| TESTCHAIN_HOST | testchain host | `127.0.0.1`  |
+| TESTCHAIN_PORT | testchain port | `2000` |
+| TESTCHAIN_DEPLOY | contract address |  |
+| TESTCHAIN_GOV | contract address |  |
+| TESTCHAIN_VAT | contract address |  |
+| TESTCHAIN_PIT | contract address |  |
+| TESTCHAIN_DRIP | contract address |  |
+| TESTCHAIN_CAT | contract address |  |
+| TESTCHAIN_VOW | contract address |  |
+| TESTCHAIN_MCD | contract address |  |
+| TESTCHAIN_JOIN_DAI | contract address |  |
+| TESTCHAIN_MOVE_DAI | contract address |  |
+| TESTCHAIN_FLAP | contract address |  |
+| TESTCHAIN_FLOP | contract address |  |
+| TESTCHAIN_MOM | contract address |  |
+| TESTCHAIN_DAI | contract address |  |
+| TESTCHAIN_DAI_GUARD | contract address |  |
+| TESTCHAIN_DGX | contract address |  |
+| TESTCHAIN_JOIN_DGX | contract address |  |
+| TESTCHAIN_MOVE_DGX | contract address |  |
+| TESTCHAIN_FLIP_DGX | contract address |  |
+| TESTCHAIN_SPOT_DGX | contract address |  |
+| TESTCHAIN_PIP_DGX | contract address |  |
+| TESTCHAIN_PIP_ETH | contract address |  |
+| TESTCHAIN_JOIN_ETH | contract address |  |
+| TESTCHAIN_MOVE_ETH | contract address |  |
+| TESTCHAIN_FLIP_ETH | contract address |  |
+| TESTCHAIN_SPOT_ETH | contract address |  |
+| TESTCHAIN_REP | contract address |  |
+| TESTCHAIN_PIP_REP | contract address |  |
+| TESTCHAIN_JOIN_REP | contract address |  |
+| TESTCHAIN_MOVE_REP | contract address |  |
+| TESTCHAIN_FLIP_REP | contract address |  |
+| TESTCHAIN_SPOT_REP | contract address |  |
 
 ## Creating new snapshots
 

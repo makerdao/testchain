@@ -4,20 +4,20 @@ set -e
 CWD="${0%/*}"
 LIB=$CWD/../lib
 OUT=$CWD/../out
-OUTPUT_FORMAT=json
+DEPLOYMENT_OUTPUT=json
 TEMPLATE=""
 PORT=2000
 
 # parse arguments
 while [[ "$#" > 0 ]]; do case $1 in
-  -o|--output) OUTPUT_FORMAT="$2"; shift;;
+  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   -p|--port) PORT="$2"; shift;;
   --template) TEMPLATE="$2"; shift;;
 esac; shift; done
 
 
 # Pre check output format before doing something
-if ! [[ "$OUTPUT_FORMAT" =~ ^(json|env|yaml|yml)$ ]]; then
+if ! [[ "$DEPLOYMENT_OUTPUT" =~ ^(json|env|yaml|yml)$ ]]; then
   if [ ! -f "$TEMPLATE" ]; then
     echo "Template file $TEMPLATE - does not exist"
     exit 1
@@ -33,7 +33,7 @@ cd -
 # Output functions file
 source $CWD/output
 
-case "$OUTPUT_FORMAT" in
+case "$DEPLOYMENT_OUTPUT" in
   json)
     write_json "$OUT/addresses.json"
     ;;
@@ -44,8 +44,8 @@ case "$OUTPUT_FORMAT" in
     write_env "$OUT/addresses"
     ;;
   *)
-    copy_template "$TEMPLATE" "$OUTPUT_FORMAT"
-    write_template "$OUTPUT_FORMAT"
+    copy_template "$TEMPLATE" "$DEPLOYMENT_OUTPUT"
+    write_template "$DEPLOYMENT_OUTPUT"
     ;;
 esac
 

@@ -7,7 +7,7 @@ LIB=$CWD/../lib
 VAR=$CWD/../var
 OUT=$CWD/../out
 PORT=2000
-OUTPUT_FORMAT=json
+DEPLOYMENT_OUTPUT=json
 TEMPLATE=""
 
 # parse arguments
@@ -15,7 +15,7 @@ otherargs=()
 while [[ "$#" > 0 ]]; do case $1 in
   --ci) ci=1;;
   -d|--deploy) deploy=1;;
-  -o|--output) OUTPUT_FORMAT="$2"; shift;;
+  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   --fast) fast=1;;
   -p|--port) PORT="$2"; shift;;
   -s|--snapshot) snapshot="$2"; shift;;
@@ -82,7 +82,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     if [ "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
       echo "Skipping build of dapps that are already built."
     fi
-    $CWD/deploy -p "$PORT" -o "$OUTPUT_FORMAT" --template "$TEMPLATE"
+    $CWD/deploy -p "$PORT" -o "$DEPLOYMENT_OUTPUT" --template "$TEMPLATE"
   fi
 
   END_TIME=`date +%s`

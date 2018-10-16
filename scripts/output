@@ -147,7 +147,7 @@ EOM
 function copy_template
 {
   if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "No input or output file passed. Use copy_template path/to/input.template path/to/output.json"
+    echo "No input or output file passed. Use copy_template path/to/input.template path/to/output.any"
     exit 1
   fi
 
@@ -167,7 +167,7 @@ function copy_template
 function write_template
 {
   if [ -z "$1" ]; then
-    echo "No output file passed. Use write_template path/to/file.json"
+    echo "No output file passed. Use write_template path/to/file.any"
     exit 1
   fi
 
