@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+HOST="127.0.0.1"
+
 function write_json 
 {
   if [ -z "$1" ]; then
@@ -50,7 +52,7 @@ function write_env
 {
   
   if [ -z "$1" ]; then
-    echo "No output file passed. Use write_json path/to/file.json"
+    echo "No output file passed. Use write_env path/to/file.sh"
     exit 1
   fi
 
@@ -58,7 +60,7 @@ function write_env
   cat > $1 <<- EOM
 #!/usr/bin/env bash
 
-export ETH_RPC_URL="127.0.0.1:$PORT"
+export ETH_RPC_URL="$HOST:$PORT"
 export MCD_DEPLOY=$MCD_DEPLOY
 export MCD_GOV=$MCD_GOV
 export MCD_VAT=$MCD_VAT
@@ -99,13 +101,13 @@ EOM
 function write_yaml
 {
   if [ -z "$1" ]; then
-    echo "No output file passed. Use write_json path/to/file.json"
+    echo "No output file passed. Use write_yaml path/to/file.yaml"
     exit 1
   fi
 
   echo "Publishing output into $1"
   cat > $1 <<- EOM
-rpc_url: "127.0.0.1:$PORT"
+rpc_url: "$HOST:$PORT"
 mcd:
   deploy: "$MCD_DEPLOY"
   gov: "$MCD_GOV"
@@ -141,3 +143,74 @@ pip:
 rep: "$REP"
 EOM
 }
+
+function copy_template
+{
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "No input or output file passed. Use copy_template path/to/input.template path/to/output.any"
+    exit 1
+  fi
+
+  if [ -f "$2" ]; then
+    echo "Output configuration file already exist. Delete it [y/n] ?"
+    read yn
+    if [[ $yn =~ ^[Yy]$ ]]; then
+      rm "$2"
+    else
+      echo "Nothing else to do! Exiting..."
+      exit 1
+    fi
+  fi
+  cp $1 $2
+}
+
+function write_template
+{
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_template path/to/file.any"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  
+  sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
+  sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
+  sed -i -e "s/{{TESTCHAIN_DEPLOY}}/$MCD_DEPLOY/g" $1
+  sed -i -e "s/{{TESTCHAIN_GOV}}/$MCD_GOV/g" $1
+  sed -i -e "s/{{TESTCHAIN_VAT}}/$MCD_VAT/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIT}}/$MCD_PIT/g" $1
+  sed -i -e "s/{{TESTCHAIN_DRIP}}/$MCD_DRIP/g" $1
+  sed -i -e "s/{{TESTCHAIN_CAT}}/$MCD_CAT/g" $1
+  sed -i -e "s/{{TESTCHAIN_VOW}}/$MCD_VOW/g" $1
+  sed -i -e "s/{{TESTCHAIN_MCD}}/$MCD_MCD/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_DAI}}/$MCD_JOIN_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_DAI}}/$MCD_MOVE_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLAP}}/$MCD_FLAP/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLOP}}/$MCD_FLOP/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOM}}/$MCD_MOM/g" $1
+  sed -i -e "s/{{TESTCHAIN_DAI}}/$MCD_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_DAI_GUARD}}/$MCD_DAI_GUARD/g" $1
+  sed -i -e "s/{{TESTCHAIN_DGX}}/$MCD_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_DGX}}/$MCD_JOIN_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_DGX}}/$MCD_MOVE_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_DGX}}/$MCD_FLIP_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_DGX}}/$MCD_SPOT_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_DGX}}/$PIP_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_ETH}}/$PIP_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_ETH}}/$MCD_JOIN_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_ETH}}/$MCD_MOVE_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_ETH}}/$MCD_FLIP_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_ETH}}/$MCD_SPOT_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_REP}}/$REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_REP}}/$PIP_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_REP}}/$MCD_JOIN_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_REP}}/$MCD_MOVE_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_REP}}/$MCD_FLIP_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_REP}}/$MCD_SPOT_REP/g" $1
+
+  # For osx `sed -i -e` will create new file $1-e and we have to remove it.
+  if [ -f "$1-e" ]; then
+    rm -f "$1-e"
+  fi
+}
+
