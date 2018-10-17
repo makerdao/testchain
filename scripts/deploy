@@ -116,7 +116,7 @@ else
   dapp build 2> /dev/null
 fi
 echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
-OASIS_PROXY=$(dapp create ProxyCreationAndExecute)
+OASIS_PROXY=$(dapp create ProxyCreationAndExecute $SAI_GEM)
 echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
 cd -
 
@@ -146,9 +146,9 @@ cat > $OUT/addresses.json <<- EOM
   "DS_PROXY_FACTORY": "$DS_PROXY_FACTORY",
   "PROXY_REGISTRY": "$PROXY_REGISTRY",
   "DS_PROXY": "$DS_PROXY",
-  "SAI_PROXY": "$SAI_PROXY"
+  "SAI_PROXY": "$SAI_PROXY",
   "OASIS_PROXY": "$OASIS_PROXY"
 }
 EOM
 
-$CWD/collect-abis.sh
+$CWD/collect-abis
