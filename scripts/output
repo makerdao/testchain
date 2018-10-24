@@ -12,6 +12,8 @@ function write_json
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 {
+  "ETH_RPC_URL": "$HOST:$PORT",
+  "ETH_FROM": "$ETH_FROM",
   "MCD_DEPLOY": "$MCD_DEPLOY",
   "MCD_GOV": "$MCD_GOV",
   "MCD_VAT": "$MCD_VAT",
@@ -61,6 +63,7 @@ function write_env
 #!/usr/bin/env bash
 
 export ETH_RPC_URL="$HOST:$PORT"
+export ETH_FROM=$ETH_FROM
 export MCD_DEPLOY=$MCD_DEPLOY
 export MCD_GOV=$MCD_GOV
 export MCD_VAT=$MCD_VAT
@@ -108,6 +111,7 @@ function write_yaml
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 rpc_url: "$HOST:$PORT"
+eth_from: "$ETH_FROM"
 mcd:
   deploy: "$MCD_DEPLOY"
   gov: "$MCD_GOV"
@@ -173,6 +177,7 @@ function write_template
 
   echo "Publishing output into $1"
   
+  sed -i -e "s/{{TESTCHAIN_ETH_FROM}}/$ETH_FROM/g" $1
   sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
   sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
   sed -i -e "s/{{TESTCHAIN_DEPLOY}}/$MCD_DEPLOY/g" $1
