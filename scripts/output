@@ -12,6 +12,8 @@ function write_json
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 {
+  "ETH_RPC_URL": "127.0.01:$PORT",
+  "ETH_FROM": "$ETH_FROM",
   "GEM": "$SAI_GEM",
   "GOV": "$SAI_GOV",
   "PIP": "$SAI_PIP",
@@ -49,6 +51,7 @@ function write_env
 #!/usr/bin/env bash
 
 export ETH_RPC_URL="127.0.0.1:$PORT"
+export ETH_FROM=$ETH_FROM
 export GEM="$SAI_GEM"
 export GOV="$SAI_GOV"
 export PIP="$SAI_PIP"
@@ -83,6 +86,7 @@ function write_yaml
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 rpc_url: "127.0.0.1:$PORT"
+eth_from: "$ETH_FROM"
 gem: "$SAI_GEM"
 gov: "$SAI_GOV"
 pip: "$SAI_PIP"
@@ -135,6 +139,7 @@ function write_template
 
   echo "Publishing output into $1"
   
+  sed -i -e "s/{{TESTCHAIN_ETH_FROM}}/$ETH_FROM/g" $1
   sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
   sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
   sed -i -e "s/{{TESTCHAIN_SAI_GEM}}/$SAI_GEM/g" $1
