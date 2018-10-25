@@ -28,6 +28,8 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 
 * `-p, --port`: Start Ganache on a different port.
 
+* `--verbose`: Stream all ganache output to console (useful for debugging)
+
 * `--ci`: If this is set, all unrecognized arguments will be treated as a new command. This command will be run once the test chain is up, and Ganache will exit afterward.
 
 * `-o, --output`: Works only with `-d`. Will export deployed contracts to specified format. Available formats are: `json|env|yaml|template`
