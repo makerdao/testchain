@@ -55,16 +55,24 @@ if ! nc -z 127.0.0.1 $PORT; then
   export SETH_STATUS=yes
   export ETH_RPC_ACCOUNTS=yes # Don't use ethsign
   export ETH_RPC_URL=http://127.0.0.1:$PORT
+  
+  # Start a testnet
+  GANACHE_CLI=$CWD/../node_modules/.bin/ganache-cli
+  if [ ! -e $GANACHE_CLI ]; then
+    echo "Installing Ganache..."
+    cd $CWD/..
+    yarn install
+    cd -
+  fi
 
-  # Start a testnet on port
   echo "Starting Ganache..."
   if [ $verbose ]; then
-    ./node_modules/.bin/ganache-cli --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
+    $GANACHE_CLI --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
       -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
       --db $VAR/chaindata \
       2>&1 & netpid=$!
   else
-    ./node_modules/.bin/ganache-cli --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
+    $GANACHE_CLI --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
       -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
       --db $VAR/chaindata \
       > $VAR/ganache.out 2>&1 & netpid=$!
