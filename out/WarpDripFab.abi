@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"vat","type":"address"}],"name":"newDrip","outputs":[{"name":"drip","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

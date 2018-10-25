@@ -8,7 +8,7 @@ OUT=$CWD/../out
 mkdir -p $OUT
 
 ls $LIB/dss-deploy/out/*.abi | \
-  grep -v -E "(Fab|Dev|Test|t_sol)" | \
+  grep -v -E "(Dev|Test|t_sol)" | \
   xargs sh -c "cp \$@ $OUT" placeholder
 
 # for an explanation of the placeholder arg above, see:
