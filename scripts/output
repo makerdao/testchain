@@ -13,6 +13,7 @@ function write_json
   cat > $1 <<- EOM
 {
   "MCD_DEPLOY": "$MCD_DEPLOY",
+  "MCD_ADM": "$MCD_ADM",
   "MCD_GOV": "$MCD_GOV",
   "MCD_VAT": "$MCD_VAT",
   "MCD_PIT": "$MCD_PIT",
@@ -62,6 +63,7 @@ function write_env
 
 export ETH_RPC_URL="$HOST:$PORT"
 export MCD_DEPLOY=$MCD_DEPLOY
+export MCD_ADM=$MCD_ADM
 export MCD_GOV=$MCD_GOV
 export MCD_VAT=$MCD_VAT
 export MCD_PIT=$MCD_PIT
@@ -110,6 +112,7 @@ function write_yaml
 rpc_url: "$HOST:$PORT"
 mcd:
   deploy: "$MCD_DEPLOY"
+  adm: "$MCD_ADM"
   gov: "$MCD_GOV"
   vat: "$MCD_VAT"
   pit: "$MCD_PIT"    
@@ -176,6 +179,7 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
   sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
   sed -i -e "s/{{TESTCHAIN_DEPLOY}}/$MCD_DEPLOY/g" $1
+  sed -i -e "s/{{TESTCHAIN_MCD_ADM}}/$ETH_FROM/g" $1
   sed -i -e "s/{{TESTCHAIN_GOV}}/$MCD_GOV/g" $1
   sed -i -e "s/{{TESTCHAIN_VAT}}/$MCD_VAT/g" $1
   sed -i -e "s/{{TESTCHAIN_PIT}}/$MCD_PIT/g" $1
