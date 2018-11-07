@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"pit","type":"address"},{"name":"ilk","type":"bytes32"}],"name":"newSpotter","outputs":[{"name":"spotter","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

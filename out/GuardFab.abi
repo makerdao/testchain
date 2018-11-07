@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[],"name":"newGuard","outputs":[{"name":"guard","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

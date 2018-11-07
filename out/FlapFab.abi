@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"dai","type":"address"},{"name":"gov","type":"address"}],"name":"newFlap","outputs":[{"name":"flap","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

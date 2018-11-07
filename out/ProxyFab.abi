@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[],"name":"newProxy","outputs":[{"name":"proxy","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

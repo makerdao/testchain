@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"vat","type":"address"}],"name":"newPit","outputs":[{"name":"pit","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
