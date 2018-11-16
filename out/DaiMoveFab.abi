@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"vat","type":"address"}],"name":"newDaiMove","outputs":[{"name":"daiMove","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

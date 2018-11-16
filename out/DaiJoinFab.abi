@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"vat","type":"address"},{"name":"dai","type":"address"}],"name":"newDaiJoin","outputs":[{"name":"daiJoin","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

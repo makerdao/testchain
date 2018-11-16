@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"dai","type":"address"},{"name":"gov","type":"address"}],"name":"newFlop","outputs":[{"name":"flop","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

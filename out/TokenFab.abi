@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"symbol","type":"bytes32"}],"name":"newToken","outputs":[{"name":"token","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]

@@ -15,6 +15,7 @@ function write_json
   "ETH_RPC_URL": "$HOST:$PORT",
   "ETH_FROM": "$ETH_FROM",
   "MCD_DEPLOY": "$MCD_DEPLOY",
+  "MCD_ADM": "$MCD_ADM",
   "MCD_GOV": "$MCD_GOV",
   "MCD_VAT": "$MCD_VAT",
   "MCD_PIT": "$MCD_PIT",
@@ -65,6 +66,7 @@ function write_env
 export ETH_RPC_URL="$HOST:$PORT"
 export ETH_FROM=$ETH_FROM
 export MCD_DEPLOY=$MCD_DEPLOY
+export MCD_ADM=$MCD_ADM
 export MCD_GOV=$MCD_GOV
 export MCD_VAT=$MCD_VAT
 export MCD_PIT=$MCD_PIT
@@ -114,6 +116,7 @@ rpc_url: "$HOST:$PORT"
 eth_from: "$ETH_FROM"
 mcd:
   deploy: "$MCD_DEPLOY"
+  adm: "$MCD_ADM"
   gov: "$MCD_GOV"
   vat: "$MCD_VAT"
   pit: "$MCD_PIT"    
@@ -181,6 +184,7 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
   sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
   sed -i -e "s/{{TESTCHAIN_DEPLOY}}/$MCD_DEPLOY/g" $1
+  sed -i -e "s/{{TESTCHAIN_MCD_ADM}}/$ETH_FROM/g" $1
   sed -i -e "s/{{TESTCHAIN_GOV}}/$MCD_GOV/g" $1
   sed -i -e "s/{{TESTCHAIN_VAT}}/$MCD_VAT/g" $1
   sed -i -e "s/{{TESTCHAIN_PIT}}/$MCD_PIT/g" $1
