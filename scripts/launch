@@ -18,6 +18,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   --fast) fast=1;;
   -p|--port) PORT="$2"; shift;;
   -s|--snapshot) snapshot="$2"; shift;;
+  -u | --skip-update) SKIP_SUBMODULE_UPDATE=1;;
   *) otherargs+=($1);;
 esac; shift; done
 
