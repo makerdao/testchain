@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+HOST="127.0.0.1"
+
 function write_json 
 {
   if [ -z "$1" ]; then
@@ -10,6 +12,8 @@ function write_json
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 {
+  "ETH_RPC_URL": "127.0.01:$PORT",
+  "ETH_FROM": "$ETH_FROM",
   "GEM": "$SAI_GEM",
   "GOV": "$SAI_GOV",
   "PIP": "$SAI_PIP",
@@ -48,6 +52,7 @@ function write_env
 #!/usr/bin/env bash
 
 export ETH_RPC_URL="127.0.0.1:$PORT"
+export ETH_FROM=$ETH_FROM
 export GEM="$SAI_GEM"
 export GOV="$SAI_GOV"
 export PIP="$SAI_PIP"
@@ -83,6 +88,7 @@ function write_yaml
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 rpc_url: "127.0.0.1:$PORT"
+eth_from: "$ETH_FROM"
 gem: "$SAI_GEM"
 gov: "$SAI_GOV"
 pip: "$SAI_PIP"
@@ -105,4 +111,63 @@ ds_proxy: "$DS_PROXY"
 sai_proxy: "$SAI_PROXY"
 oasis_proxy: "$OASIS_PROXY"
 EOM
+}
+
+function copy_template
+{
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "No input or output file passed. Use copy_template path/to/input.template path/to/output.any"
+    exit 1
+  fi
+
+  if [ -f "$2" ]; then
+    echo "Output configuration file already exist. Delete it [y/n] ?"
+    read yn
+    if [[ $yn =~ ^[Yy]$ ]]; then
+      rm "$2"
+    else
+      echo "Nothing else to do! Exiting..."
+      exit 1
+    fi
+  fi
+  cp $1 $2
+}
+
+function write_template
+{
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_template path/to/file.any"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  
+  sed -i -e "s/{{TESTCHAIN_ETH_FROM}}/$ETH_FROM/g" $1
+  sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
+  sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_GEM}}/$SAI_GEM/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_GOV}}/$SAI_GOV/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_PIP}}/$SAI_PIP/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_PEP}}/$SAI_PEP/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_PIT}}/$SAI_PIT/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_ADM}}/$SAI_ADM/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_SAI}}/$SAI_SAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_SIN}}/$SAI_SIN/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_SKR}}/$SAI_SKR/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_DAD}}/$SAI_DAD/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_MOM}}/$SAI_MOM/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_VOX}}/$SAI_VOX/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_TUB}}/$SAI_TUB/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_TAP}}/$SAI_TAP/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_TOP}}/$SAI_TOP/g" $1
+  sed -i -e "s/{{TESTCHAIN_OTC}}/$OTC/g" $1
+  sed -i -e "s/{{TESTCHAIN_DS_PROXY_FACTORY}}/$DS_PROXY_FACTORY/g" $1
+  sed -i -e "s/{{TESTCHAIN_PROXY_REGISTRY}}/$PROXY_REGISTRY/g" $1
+  sed -i -e "s/{{TESTCHAIN_DS_PROXY}}/$DS_PROXY/g" $1
+  sed -i -e "s/{{TESTCHAIN_SAI_PROXY}}/$SAI_PROXY/g" $1
+
+  # For osx `sed -i -e` will create new file $1-e and we have to remove it.
+  if [ -f "$1-e" ]; then
+    rm -f "$1-e"
+  fi
 }
