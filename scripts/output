@@ -33,7 +33,8 @@ function write_json
   "DS_PROXY_FACTORY": "$DS_PROXY_FACTORY",
   "PROXY_REGISTRY": "$PROXY_REGISTRY",
   "DS_PROXY": "$DS_PROXY",
-  "SAI_PROXY": "$SAI_PROXY"
+  "SAI_PROXY": "$SAI_PROXY",
+  "OASIS_PROXY": "$OASIS_PROXY"
 }
 EOM
 }
@@ -72,6 +73,7 @@ export DS_PROXY_FACTORY="$DS_PROXY_FACTORY"
 export PROXY_REGISTRY="$PROXY_REGISTRY"
 export DS_PROXY="$DS_PROXY"
 export SAI_PROXY="$SAI_PROXY"
+export OASIS_PROXY="$OASIS_PROXY"
 
 EOM
 }
@@ -107,6 +109,7 @@ ds_proxy_factory: "$DS_PROXY_FACTORY"
 proxy_registry: "$PROXY_REGISTRY"
 ds_proxy: "$DS_PROXY"
 sai_proxy: "$SAI_PROXY"
+oasis_proxy: "$OASIS_PROXY"
 EOM
 }
 

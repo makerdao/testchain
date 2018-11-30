@@ -18,6 +18,8 @@ If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the cha
 
 If `var/chaindata` does not exist, the `default` snapshot will be used to create it.
 
+If you want to start the launch script with an empty snapshot, you will need to `mkdir -p testchain/var/chaindata` first.
+
 ### Options
 
 * `-s, --snapshot`: Optional. This should match the name of a folder under the `snapshots` folder. This will be copied to `var/chaindata`, overwriting anything there.
@@ -25,6 +27,8 @@ If `var/chaindata` does not exist, the `default` snapshot will be used to create
 * `-d, --deploy`: Optional. If set, `scripts/deploy.sh` will be run once Ganache is set up, to deploy contracts to the test chain.
 
 * `--fast`: Skip `git submodule update` and skip running `dapp build` for dapps that are already built. This is accomplished by setting the `SKIP_BUILD_IF_ALREADY_BUILT` environment variable, so the dapp build scripts must be written (or modified; see the use of `sed_inplace` in `deploy.sh`) to support it.
+
+* `-u, --skip-update`: Skip the git submodule updates, but still run `dapp build` on the contracts.
 
 * `-p, --port`: Start Ganache on a different port.
 

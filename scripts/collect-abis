@@ -12,6 +12,7 @@ cp $LIB/maker-otc/out/MatchingMarket.abi \
   $LIB/ds-proxy/out/DSProxyFactory.abi \
   $LIB/sai-proxy/out/SaiProxyCreateAndExecute.abi \
   $LIB/proxy-registry/out/ProxyRegistry.abi \
+  $LIB/oasis-direct-proxy/out/ProxyCreationAndExecute.abi \
 $OUT
 
 ls $LIB/sai/out/*.abi | \
