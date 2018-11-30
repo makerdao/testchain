@@ -17,6 +17,7 @@ while [[ "$#" > 0 ]]; do case $1 in
   -d|--deploy) deploy=1;;
   -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   --fast) fast=1;;
+  --reset-chaindata) reset_chaindata=1;;
   -p|--port) PORT="$2"; shift;;
   -s|--snapshot) snapshot="$2"; shift;;
   -u | --skip-update) SKIP_SUBMODULE_UPDATE=1;;
@@ -29,15 +30,23 @@ esac; shift; done
 if ! nc -z 127.0.0.1 $PORT; then
   mkdir -p $VAR
 
-  if [ "$snapshot" ]; then
-    echo "Loading snapshots/$snapshot."
+  if [ "$reset_chaindata" ]; then
+    echo "Clearing chaindata."
     rm -rf $VAR/chaindata
-    cp -r $CWD/../snapshots/$snapshot $VAR/chaindata
-  elif [ ! -e $VAR/chaindata ]; then
-    echo "Loading snapshots/default."
-    cp -r $CWD/../snapshots/default $VAR/chaindata
+    mkdir $VAR/chaindata
   else
-    echo "Using existing chaindata on disk."
+    if [ ! -e $VAR/chaindata ]; then
+      snapshot="default"
+    fi
+
+    if [ "$snapshot" ]; then
+      echo "Loading snapshots/$snapshot."
+      rm -rf $VAR/chaindata
+      mkdir $VAR/chaindata
+      tar xzf $CWD/../snapshots/$snapshot.tgz -C $VAR/chaindata
+    else
+      echo "Using existing chaindata on disk."
+    fi
   fi
 
   if [ $fast ]; then
@@ -65,7 +74,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     yarn install
     cd -
   fi
-  
+
   echo "Starting Ganache..."
   if [ $verbose ]; then
     $GANACHE_CLI --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \

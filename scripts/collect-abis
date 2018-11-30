@@ -5,7 +5,7 @@ CWD="${0%/*}"
 LIB=$CWD/../lib
 OUT=$CWD/../out
 
-mkdir -p $OUT
+mkdir -p $OUT/mcd
 
 cp $LIB/maker-otc/out/MatchingMarket.abi \
   $LIB/ds-proxy/out/DSProxy.abi \
@@ -16,8 +16,12 @@ cp $LIB/maker-otc/out/MatchingMarket.abi \
 $OUT
 
 ls $LIB/sai/out/*.abi | \
-  grep -v -E "(Fab|Dev|Test)" | \
+  grep -v -E "(Fab|Dev|Test|t_sol)" | \
   xargs sh -c "cp \$@ $OUT" placeholder
+
+ls $LIB/dss-deploy/out/*.abi | \
+  grep -v -E "(Fab|Dev|Test|t_sol)" | \
+  xargs sh -c "cp \$@ $OUT/mcd" placeholder
 
 # for an explanation of the placeholder arg above, see:
 # https://en.wikipedia.org/wiki/Xargs#Shell_trick

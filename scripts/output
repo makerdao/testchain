@@ -2,7 +2,7 @@
 
 HOST="127.0.0.1"
 
-function write_json 
+function write_json
 {
   if [ -z "$1" ]; then
     echo "No output file passed. Use write_json path/to/file.json"
@@ -12,7 +12,7 @@ function write_json
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 {
-  "ETH_RPC_URL": "127.0.01:$PORT",
+  "ETH_RPC_URL": "$HOST:$PORT",
   "ETH_FROM": "$ETH_FROM",
   "GEM": "$SAI_GEM",
   "GOV": "$SAI_GOV",
@@ -39,9 +39,9 @@ function write_json
 EOM
 }
 
-function write_env 
+function write_env
 {
-  
+
   if [ -z "$1" ]; then
     echo "No output file passed. Use write_json path/to/file.json"
     exit 1
@@ -113,6 +113,155 @@ oasis_proxy: "$OASIS_PROXY"
 EOM
 }
 
+function write_json_mcd
+{
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_json path/to/file.json"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
+{
+  "ETH_RPC_URL": "$HOST:$PORT",
+  "ETH_FROM": "$ETH_FROM",
+  "MCD_DEPLOY": "$MCD_DEPLOY",
+  "MCD_ADM": "$MCD_ADM",
+  "MCD_GOV": "$MCD_GOV",
+  "MCD_VAT": "$MCD_VAT",
+  "MCD_PIT": "$MCD_PIT",
+  "MCD_DRIP": "$MCD_DRIP",
+  "MCD_CAT": "$MCD_CAT",
+  "MCD_VOW": "$MCD_VOW",
+  "MCD_MCD": "$MCD_MCD",
+  "MCD_JOIN_DAI": "$MCD_JOIN_DAI",
+  "MCD_MOVE_DAI": "$MCD_MOVE_DAI",
+  "MCD_FLAP": "$MCD_FLAP",
+  "MCD_FLOP": "$MCD_FLOP",
+  "MCD_MOM": "$MCD_MOM",
+  "MCD_DAI": "$MCD_DAI",
+  "MCD_DAI_GUARD": "$MCD_DAI_GUARD",
+  "PIP_DGX": "$PIP_DGX",
+  "MCD_JOIN_DGX": "$MCD_JOIN_DGX",
+  "MCD_MOVE_DGX": "$MCD_MOVE_DGX",
+  "MCD_FLIP_DGX": "$MCD_FLIP_DGX",
+  "MCD_SPOT_DGX": "$MCD_SPOT_DGX",
+  "PIP_ETH": "$PIP_ETH",
+  "MCD_JOIN_ETH": "$MCD_JOIN_ETH",
+  "MCD_MOVE_ETH": "$MCD_MOVE_ETH",
+  "MCD_FLIP_ETH": "$MCD_FLIP_ETH",
+  "MCD_SPOT_ETH": "$MCD_SPOT_ETH",
+  "PIP_REP": "$PIP_REP",
+  "REP": "$REP",
+  "MCD_JOIN_REP": "$MCD_JOIN_REP",
+  "MCD_MOVE_REP": "$MCD_MOVE_REP",
+  "MCD_FLIP_REP": "$MCD_FLIP_REP",
+  "MCD_SPOT_REP": "$MCD_SPOT_REP"
+}
+EOM
+
+}
+
+function write_env_mcd
+{
+
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_env path/to/file.sh"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
+#!/usr/bin/env bash
+
+export ETH_RPC_URL="$HOST:$PORT"
+export ETH_FROM=$ETH_FROM
+export MCD_DEPLOY=$MCD_DEPLOY
+export MCD_ADM=$MCD_ADM
+export MCD_GOV=$MCD_GOV
+export MCD_VAT=$MCD_VAT
+export MCD_PIT=$MCD_PIT
+export MCD_DRIP=$MCD_DRIP
+export MCD_CAT=$MCD_CAT
+export MCD_VOW=$MCD_VOW
+export MCD_DAI=$MCD_DAI
+export MCD_JOIN_DAI=$MCD_JOIN_DAI
+export MCD_MOVE_DAI=$MCD_MOVE_DAI
+export MCD_FLAP=$MCD_FLAP
+export MCD_FLOP=$MCD_FLOP
+export MCD_MOM=$MCD_MOM
+export MCD_DAI_GUARD=$MCD_DAI_GUARD
+
+export PIP_ETH=$PIP_ETH
+export MCD_JOIN_ETH=$MCD_JOIN_ETH
+export MCD_MOVE_ETH=$MCD_MOVE_ETH
+export MCD_FLIP_ETH=$MCD_FLIP_ETH
+export MCD_SPOT_ETH=$MCD_SPOT_ETH
+
+export REP=$REP
+export PIP_REP=$PIP_REP
+export MCD_JOIN_REP=$MCD_JOIN_REP
+export MCD_MOVE_REP=$MCD_MOVE_REP
+export MCD_FLIP_REP=$MCD_FLIP_REP
+export MCD_SPOT_REP=$MCD_SPOT_REP
+
+export PIP_DGX=$PIP_DGX
+export MCD_JOIN_DGX=$MCD_JOIN_DGX
+export MCD_MOVE_DGX=$MCD_MOVE_DGX
+export MCD_FLIP_DGX=$MCD_FLIP_DGX
+export MCD_SPOT_DGX=$MCD_SPOT_DGX
+
+EOM
+}
+
+function write_yaml_mcd
+{
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_yaml path/to/file.yaml"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
+rpc_url: "$HOST:$PORT"
+eth_from: "$ETH_FROM"
+mcd:
+  deploy: "$MCD_DEPLOY"
+  adm: "$MCD_ADM"
+  gov: "$MCD_GOV"
+  vat: "$MCD_VAT"
+  pit: "$MCD_PIT"
+  drip: "$MCD_DRIP"
+  cat: "$MCD_CAT"
+  vow: "$MCD_VOW"
+  mcd: "$MCD_MCD"
+  join_dai: "$MCD_JOIN_DAI"
+  move_dai: "$MCD_MOVE_DAI"
+  flap: "$MCD_FLAP"
+  flop: "$MCD_FLOP"
+  mom: "$MCD_MOM"
+  dai: "$MCD_DAI"
+  dai_guard: "$MCD_DAI_GUARD"
+  join_dgx: "$MCD_JOIN_DGX"
+  move_dgx: "$MCD_MOVE_DGX"
+  flip_dgx: "$MCD_FLIP_DGX"
+  spot_dgx: "$MCD_SPOT_DGX"
+  join_eth: "$MCD_JOIN_ETH"
+  move_eth: "$MCD_MOVE_ETH"
+  flip_eth: "$MCD_FLIP_ETH"
+  spot_eth: "$MCD_SPOT_ETH"
+  join_rep: "$MCD_JOIN_REP"
+  move_rep: "$MCD_MOVE_REP"
+  flip_rep: "$MCD_FLIP_REP"
+  spot_rep: "$MCD_SPOT_REP"
+pip:
+  dgx: "$PIP_DGX"
+  eth: "$PIP_ETH"
+  rep: "$PIP_REP"
+rep: "$REP"
+EOM
+}
+
 function copy_template
 {
   if [ -z "$1" ] || [ -z "$2" ]; then
@@ -141,7 +290,7 @@ function write_template
   fi
 
   echo "Publishing output into $1"
-  
+
   sed -i -e "s/{{TESTCHAIN_ETH_FROM}}/$ETH_FROM/g" $1
   sed -i -e "s/{{TESTCHAIN_HOST}}/$HOST/g" $1
   sed -i -e "s/{{TESTCHAIN_PORT}}/$PORT/g" $1
@@ -165,6 +314,39 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_PROXY_REGISTRY}}/$PROXY_REGISTRY/g" $1
   sed -i -e "s/{{TESTCHAIN_DS_PROXY}}/$DS_PROXY/g" $1
   sed -i -e "s/{{TESTCHAIN_SAI_PROXY}}/$SAI_PROXY/g" $1
+  sed -i -e "s/{{TESTCHAIN_DEPLOY}}/$MCD_DEPLOY/g" $1
+  sed -i -e "s/{{TESTCHAIN_MCD_ADM}}/$ETH_FROM/g" $1
+  sed -i -e "s/{{TESTCHAIN_GOV}}/$MCD_GOV/g" $1
+  sed -i -e "s/{{TESTCHAIN_VAT}}/$MCD_VAT/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIT}}/$MCD_PIT/g" $1
+  sed -i -e "s/{{TESTCHAIN_DRIP}}/$MCD_DRIP/g" $1
+  sed -i -e "s/{{TESTCHAIN_CAT}}/$MCD_CAT/g" $1
+  sed -i -e "s/{{TESTCHAIN_VOW}}/$MCD_VOW/g" $1
+  sed -i -e "s/{{TESTCHAIN_MCD}}/$MCD_MCD/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_DAI}}/$MCD_JOIN_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_DAI}}/$MCD_MOVE_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLAP}}/$MCD_FLAP/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLOP}}/$MCD_FLOP/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOM}}/$MCD_MOM/g" $1
+  sed -i -e "s/{{TESTCHAIN_DAI}}/$MCD_DAI/g" $1
+  sed -i -e "s/{{TESTCHAIN_DAI_GUARD}}/$MCD_DAI_GUARD/g" $1
+  sed -i -e "s/{{TESTCHAIN_DGX}}/$MCD_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_DGX}}/$MCD_JOIN_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_DGX}}/$MCD_MOVE_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_DGX}}/$MCD_FLIP_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_DGX}}/$MCD_SPOT_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_DGX}}/$PIP_DGX/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_ETH}}/$PIP_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_ETH}}/$MCD_JOIN_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_ETH}}/$MCD_MOVE_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_ETH}}/$MCD_FLIP_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_ETH}}/$MCD_SPOT_ETH/g" $1
+  sed -i -e "s/{{TESTCHAIN_REP}}/$REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_PIP_REP}}/$PIP_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_JOIN_REP}}/$MCD_JOIN_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_MOVE_REP}}/$MCD_MOVE_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_FLIP_REP}}/$MCD_FLIP_REP/g" $1
+  sed -i -e "s/{{TESTCHAIN_SPOT_REP}}/$MCD_SPOT_REP/g" $1
 
   # For osx `sed -i -e` will create new file $1-e and we have to remove it.
   if [ -f "$1-e" ]; then

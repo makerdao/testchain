@@ -139,22 +139,30 @@ echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
 cd -
 
 ############################
+# build MCD
+
+cd $LIB/dss-deploy/
+source bin/deploy-all
+cd -
+
+############################
 # store outputs for apps to use
 
 mkdir -p $OUT
-
-# Output functions file
 source $CWD/output
 
 case "$DEPLOYMENT_OUTPUT" in
   json)
     write_json "$OUT/addresses.json"
+    write_json_mcd "$OUT/addresses-mcd.json"
     ;;
   yaml|yml)
     write_yaml "$OUT/addresses.yaml"
+    write_yaml_mcd "$OUT/addresses-mcd.yaml"
     ;;
   env)
     write_env "$OUT/addresses"
+    write_env_mcd "$OUT/addresses-mcd"
     ;;
   *)
     copy_template "$TEMPLATE" "$DEPLOYMENT_OUTPUT"
