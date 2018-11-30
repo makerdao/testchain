@@ -18,11 +18,11 @@ fi
 
 if [ -e $SNAPSHOTS/$name ]; then
   if [ "$force" ]; then
-    rm -rf $SNAPSHOTS/$name
+    rm -rf $SNAPSHOTS/$name.tgz
   else
     echo A snapshot with that name already exists. Please remove it, use a different name, or run this script with --force.
     exit 1
   fi
 fi
 
-cp -r $VAR/chaindata $SNAPSHOTS/$name
+tar czf $SNAPSHOTS/$name.tgz $VAR/chaindata/*

@@ -34,18 +34,20 @@ if ! nc -z 127.0.0.1 $PORT; then
     echo "Clearing chaindata."
     rm -rf $VAR/chaindata
     mkdir $VAR/chaindata
-  elif [ "$snapshot" ]; then
-    echo "Loading snapshots/$snapshot."
-    rm -rf $VAR/chaindata
-    cp -r $CWD/../snapshots/$snapshot $VAR/chaindata
-  elif [ ! -e $VAR/chaindata ]; then
-    echo "Loading snapshots/default."
-    cp -r $CWD/../snapshots/default $VAR/chaindata
   else
-    echo "Using existing chaindata on disk."
-  fi
+    if [ ! -e $VAR/chaindata ]; then
+      snapshot="default"
+    fi
 
-  # To create a new snapshot from scratch, mkdir $VAR/chaindata & leave it empty
+    if [ "$snapshot" ]; then
+      echo "Loading snapshots/$snapshot."
+      rm -rf $VAR/chaindata
+      mkdir $VAR/chaindata
+      tar xzf $CWD/../snapshots/$snapshot.tgz -C $VAR/chaindata
+    else
+      echo "Using existing chaindata on disk."
+    fi
+  fi
 
   if [ $fast ]; then
     export SKIP_BUILD_IF_ALREADY_BUILT=1
