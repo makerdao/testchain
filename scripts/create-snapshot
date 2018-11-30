@@ -25,4 +25,4 @@ if [ -e $SNAPSHOTS/$name ]; then
   fi
 fi
 
-tar czf $SNAPSHOTS/$name.tgz $VAR/chaindata/*
+tar czf $SNAPSHOTS/$name.tgz -C $VAR/chaindata .
