@@ -19,7 +19,7 @@ ls $LIB/sai/out/*.abi | \
   grep -v -E "(Fab|Dev|Test|t_sol)" | \
   xargs sh -c "cp \$@ $OUT" placeholder
 
-ls $LIB/dss-deploy/out/*.abi | \
+ls $LIB/dss-proxy/out/*.abi | \
   grep -v -E "(Fab|Dev|Test|t_sol)" | \
   xargs sh -c "cp \$@ $OUT/mcd" placeholder
 

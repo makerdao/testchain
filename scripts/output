@@ -141,6 +141,7 @@ function write_json_mcd
   "MCD_MOM": "$MCD_MOM",
   "MCD_DAI": "$MCD_DAI",
   "MCD_DAI_GUARD": "$MCD_DAI_GUARD",
+  "MCD_CDP_REGISTRY": "$MCD_CDP_REGISTRY",
   "PIP_DGX": "$PIP_DGX",
   "MCD_JOIN_DGX": "$MCD_JOIN_DGX",
   "MCD_MOVE_DGX": "$MCD_MOVE_DGX",
@@ -191,6 +192,7 @@ export MCD_FLAP=$MCD_FLAP
 export MCD_FLOP=$MCD_FLOP
 export MCD_MOM=$MCD_MOM
 export MCD_DAI_GUARD=$MCD_DAI_GUARD
+export MCD_CDP_REGISTRY=$MCD_CDP_REGISTRY
 
 export PIP_ETH=$PIP_ETH
 export MCD_JOIN_ETH=$MCD_JOIN_ETH
@@ -242,6 +244,7 @@ mcd:
   mom: "$MCD_MOM"
   dai: "$MCD_DAI"
   dai_guard: "$MCD_DAI_GUARD"
+  registry: "$MCD_CDP_REGISTRY"
   join_dgx: "$MCD_JOIN_DGX"
   move_dgx: "$MCD_MOVE_DGX"
   flip_dgx: "$MCD_FLIP_DGX"
@@ -330,6 +333,7 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_MOM}}/$MCD_MOM/g" $1
   sed -i -e "s/{{TESTCHAIN_DAI}}/$MCD_DAI/g" $1
   sed -i -e "s/{{TESTCHAIN_DAI_GUARD}}/$MCD_DAI_GUARD/g" $1
+  sed -i -e "s/{{TESTCHAIN_CDP_REGISTRY}}/$MCD_CDP_REGISTRY/g" $1
   sed -i -e "s/{{TESTCHAIN_DGX}}/$MCD_DGX/g" $1
   sed -i -e "s/{{TESTCHAIN_JOIN_DGX}}/$MCD_JOIN_DGX/g" $1
   sed -i -e "s/{{TESTCHAIN_MOVE_DGX}}/$MCD_MOVE_DGX/g" $1

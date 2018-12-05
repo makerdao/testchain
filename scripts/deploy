@@ -141,8 +141,20 @@ cd -
 ############################
 # build MCD
 
-cd $LIB/dss-deploy/
+echo "Deploying MCD..."
+cd $LIB/dss-proxy/lib/mcd-cdp-handler/lib/dss-deploy/
 source bin/deploy-all
+cd -
+
+echo "Deploying CdpRegistry..."
+cd $LIB/dss-proxy
+if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/CdpRegistry.abi ]; then
+  echo "Skipping dapp build"
+else
+  echo "Building oasis-direct-proxy..."
+  dapp build 2> /dev/null
+fi
+MCD_CDP_REGISTRY=$(dapp create CdpRegistry)
 cd -
 
 ############################
