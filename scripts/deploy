@@ -146,14 +146,15 @@ cd $LIB/dss-proxy/lib/mcd-cdp-handler/lib/dss-deploy/
 source bin/deploy-all
 cd -
 
-echo "Deploying CdpRegistry..."
 cd $LIB/dss-proxy
 if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/CdpRegistry.abi ]; then
-  echo "Skipping dapp build"
+  echo "Skipping dapp build for CdpRegistry and CdpLib"
 else
-  echo "Building oasis-direct-proxy..."
+  echo "Building CdpRegistry and CdpLib..."
   dapp build 2> /dev/null
 fi
+echo "Deploying CdpRegistry and CdpLib..."
+MCD_CDP_LIB=$(dapp create CdpLib)
 MCD_CDP_REGISTRY=$(dapp create CdpRegistry)
 cd -
 
