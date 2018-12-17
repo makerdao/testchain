@@ -142,20 +142,20 @@ cd -
 # build MCD
 
 echo "Deploying MCD..."
-cd $LIB/dss-proxy/lib/mcd-cdp-handler/lib/dss-deploy/
+cd $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/
 source bin/deploy-all
 cd -
 
-cd $LIB/dss-proxy
+cd $LIB/dss-proxy-actions
 if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/CdpRegistry.abi ]; then
-  echo "Skipping dapp build for CdpRegistry and CdpLib"
+  echo "Skipping dapp build for CdpManager"
 else
-  echo "Building CdpRegistry and CdpLib..."
-  dapp build 2> /dev/null
+  echo "Building CdpManager..."
+  dapp --use solc:0.5.0 build
 fi
-echo "Deploying CdpRegistry and CdpLib..."
-MCD_CDP_LIB=$(dapp create CdpLib)
-MCD_CDP_REGISTRY=$(dapp create CdpRegistry)
+echo "Deploying CdpManager..."
+MCD_CDP_MANAGER=$(dapp create DssCdpManager)
+MCD_PROXY_ACTIONS=$(dapp create DssProxyActions)
 cd -
 
 ############################

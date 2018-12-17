@@ -19,6 +19,6 @@
 [submodule "lib/oasis-direct-proxy"]
 	path = lib/oasis-direct-proxy
 	url = https://github.com/makerdao/oasis-direct-proxy.git
-[submodule "lib/dss-proxy"]
-	path = lib/dss-proxy
-	url = https://github.com/makerdao/dss-proxy
+[submodule "lib/dss-proxy-actions"]
+	path = lib/dss-proxy-actions
+	url = https://github.com/makerdao/dss-proxy-actions
