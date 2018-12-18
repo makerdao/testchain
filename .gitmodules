@@ -22,3 +22,6 @@
 [submodule "lib/dss-proxy"]
 	path = lib/dss-proxy
 	url = https://github.com/makerdao/dss-proxy
+[submodule "lib/dss-deploy"]
+	path = lib/dss-deploy
+	url = https://github.com/makerdao/dss-deploy

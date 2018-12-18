@@ -70,7 +70,6 @@ echo "Deploying maker-otc (MatchingMarket)..."
 OTC=$(dapp create MatchingMarket 1577836800) # This is some random date in 2020
 addr1=$SAI_GEM
 addr2=$SAI_SAI
-seth send $OTC "addTokenPairWhitelist(address,address)" $addr1 $addr2
 cd -
 
 ############################
