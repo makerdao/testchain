@@ -144,6 +144,7 @@ function write_json_mcd
   "MCD_CDP_MANAGER": "$MCD_CDP_MANAGER",
   "MCD_PROXY_ACTIONS": "$MCD_PROXY_ACTIONS",
   "PIP_DGX": "$PIP_DGX",
+  "DGX": "$DGX",
   "MCD_JOIN_DGX": "$MCD_JOIN_DGX",
   "MCD_MOVE_DGX": "$MCD_MOVE_DGX",
   "MCD_FLIP_DGX": "$MCD_FLIP_DGX",
@@ -209,6 +210,7 @@ export MCD_MOVE_REP=$MCD_MOVE_REP
 export MCD_FLIP_REP=$MCD_FLIP_REP
 export MCD_SPOT_REP=$MCD_SPOT_REP
 
+export DGX=$DGX
 export PIP_DGX=$PIP_DGX
 export MCD_JOIN_DGX=$MCD_JOIN_DGX
 export MCD_MOVE_DGX=$MCD_MOVE_DGX
@@ -264,6 +266,7 @@ pip:
   dgx: "$PIP_DGX"
   eth: "$PIP_ETH"
   rep: "$PIP_REP"
+dgx: "$DGX"
 rep: "$REP"
 EOM
 }
