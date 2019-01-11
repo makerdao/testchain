@@ -74,21 +74,6 @@ seth send $OTC "addTokenPairWhitelist(address,address)" $addr1 $addr2
 cd -
 
 ############################
-# build proxy factory
-
-cd $LIB/ds-proxy
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/DSProxy.abi ]; then
-  echo "Skipping dapp build for ds-proxy (already built)"
-else
-  echo "Building ds-proxy..."
-  dapp build 2> /dev/null
-fi
-echo "Deploying ds-proxy (DSProxyFactory)..."
-DS_PROXY_FACTORY=$(dapp create DSProxyFactory) # Deploy proxy factory instance
-echo "Deployed DSProxyFactory to $DS_PROXY_FACTORY"
-cd -
-
-############################
 # build proxy registry
 
 cd $LIB/proxy-registry
@@ -96,10 +81,13 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyRegistry.abi ]; then
   echo "Skipping dapp build for proxy-registry (already built)"
 else
   echo "Building proxy-registry..."
-  dapp build ProxyRegistry 2> /dev/null
+  dapp --use solc:0.5.0 build ProxyRegistry 2>/dev/null
 fi
-echo "Deploying proxy-registry (ProxyRegistry)..."
-PROXY_REGISTRY=$(dapp create ProxyRegistry $DS_PROXY_FACTORY) # Deploy proxy registry instance and pass in proxy factory
+echo "Deploying ProxyRegistry and DSProxyFactory..."
+DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
+echo "Deployed DSProxyFactory to $DS_PROXY_FACTORY"
+
+PROXY_REGISTRY=$(dapp create ProxyRegistry $DS_PROXY_FACTORY)
 echo "Deployed ProxyRegistry to $PROXY_REGISTRY"
 
 echo "Creating DSProxy via ProxyRegistry.build()..."

@@ -8,10 +8,10 @@ OUT=$CWD/../out
 mkdir -p $OUT/mcd
 
 cp $LIB/maker-otc/out/MatchingMarket.abi \
-  $LIB/ds-proxy/out/DSProxy.abi \
-  $LIB/ds-proxy/out/DSProxyFactory.abi \
   $LIB/sai-proxy/out/SaiProxyCreateAndExecute.abi \
   $LIB/proxy-registry/out/ProxyRegistry.abi \
+  $LIB/proxy-registry/out/DSProxy.abi \
+  $LIB/proxy-registry/out/DSProxyFactory.abi \
   $LIB/oasis-direct-proxy/out/ProxyCreationAndExecute.abi \
 $OUT
 
