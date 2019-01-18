@@ -139,6 +139,7 @@ function write_json_mcd
   "MCD_FLAP": "$MCD_FLAP",
   "MCD_FLOP": "$MCD_FLOP",
   "MCD_MOM": "$MCD_MOM",
+  "MCD_MOM_LIB": "$MCD_MOM_LIB",
   "MCD_DAI": "$MCD_DAI",
   "MCD_DAI_GUARD": "$MCD_DAI_GUARD",
   "MCD_CDP_MANAGER": "$MCD_CDP_MANAGER",
@@ -193,6 +194,7 @@ export MCD_MOVE_DAI=$MCD_MOVE_DAI
 export MCD_FLAP=$MCD_FLAP
 export MCD_FLOP=$MCD_FLOP
 export MCD_MOM=$MCD_MOM
+export MCD_MOM_LIB=$MCD_MOM_LIB
 export MCD_DAI_GUARD=$MCD_DAI_GUARD
 export MCD_CDP_MANAGER=$MCD_CDP_MANAGER
 export MCD_PROXY_ACTIONS=$MCD_PROXY_ACTIONS
@@ -246,6 +248,7 @@ mcd:
   flap: "$MCD_FLAP"
   flop: "$MCD_FLOP"
   mom: "$MCD_MOM"
+  mom_lib: "$MCD_MOM_LIB"
   dai: "$MCD_DAI"
   dai_guard: "$MCD_DAI_GUARD"
   cdp_manager: "$MCD_CDP_MANAGER"
