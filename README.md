@@ -6,7 +6,7 @@ This branch, `dai.js`, is configured with the contracts needed for the [Dai.js](
 
 ## Installation and requirements
 
-Requires Node.js and Bash.
+Requires [Seth](https://dapp.tools/seth/), [Nix](https://github.com/NixOS/nix), Node.js and Bash.
 
 Run `npm install` or `yarn install` to install Ganache.
 
@@ -19,6 +19,8 @@ If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the cha
 If `var/chaindata` does not exist, the `default` snapshot will be used to create it.
 
 If you want to start the launch script with an empty snapshot, you will need to `mkdir -p testchain/var/chaindata` first.
+
+Once the deployment is complete, you will find the list of contract addresses in the `out/addresses.json` file.
 
 ### Options
 
@@ -68,7 +70,7 @@ sai_gem = "{{TESTCHAIN_SAI_GEM}}"
 sai_pip = "{{TESTCHAIN_SAI_PIP}}"
 ```
 
-2. Run launch script with `-d` deploy flag. 
+2. Run launch script with `-d` deploy flag.
 
 ```bash
 $ testchain/scripts/launch -d --template your/project/path/config/local.template -o your/project/path/config/local.toml
