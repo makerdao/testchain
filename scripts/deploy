@@ -73,21 +73,6 @@ addr2=$SAI_SAI
 cd -
 
 ############################
-# build proxy factory
-
-cd $LIB/ds-proxy
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/DSProxy.abi ]; then
-  echo "Skipping dapp build for ds-proxy (already built)"
-else
-  echo "Building ds-proxy..."
-  dapp build 2> /dev/null
-fi
-echo "Deploying ds-proxy (DSProxyFactory)..."
-DS_PROXY_FACTORY=$(dapp create DSProxyFactory) # Deploy proxy factory instance
-echo "Deployed DSProxyFactory to $DS_PROXY_FACTORY"
-cd -
-
-############################
 # build proxy registry
 
 cd $LIB/proxy-registry
@@ -95,10 +80,13 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyRegistry.abi ]; then
   echo "Skipping dapp build for proxy-registry (already built)"
 else
   echo "Building proxy-registry..."
-  dapp build ProxyRegistry 2> /dev/null
+  dapp --use solc:0.5.0 build ProxyRegistry 2>/dev/null
 fi
-echo "Deploying proxy-registry (ProxyRegistry)..."
-PROXY_REGISTRY=$(dapp create ProxyRegistry $DS_PROXY_FACTORY) # Deploy proxy registry instance and pass in proxy factory
+echo "Deploying ProxyRegistry and DSProxyFactory..."
+DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
+echo "Deployed DSProxyFactory to $DS_PROXY_FACTORY"
+
+PROXY_REGISTRY=$(dapp create ProxyRegistry $DS_PROXY_FACTORY)
 echo "Deployed ProxyRegistry to $PROXY_REGISTRY"
 
 echo "Creating DSProxy via ProxyRegistry.build()..."
@@ -141,20 +129,21 @@ cd -
 # build MCD
 
 echo "Deploying MCD..."
-cd $LIB/dss-proxy/lib/mcd-cdp-handler/lib/dss-deploy/
+cd $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/
 source bin/deploy-all
 cd -
 
-cd $LIB/dss-proxy
+cd $LIB/dss-proxy-actions
 if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/CdpRegistry.abi ]; then
-  echo "Skipping dapp build for CdpRegistry and CdpLib"
+  echo "Skipping dapp build for CdpManager"
 else
-  echo "Building CdpRegistry and CdpLib..."
-  dapp build 2> /dev/null
+  echo "Building CdpManager..."
+  dapp --use solc:0.5.0 build
 fi
-echo "Deploying CdpRegistry and CdpLib..."
-MCD_CDP_LIB=$(dapp create CdpLib)
-MCD_CDP_REGISTRY=$(dapp create CdpRegistry)
+echo "Deploying CdpManager..."
+MCD_CDP_MANAGER=$(dapp create DssCdpManager)
+MCD_PROXY_ACTIONS=$(dapp create DssProxyActions)
+MCD_MOM_LIB=$(dapp create MomLib)
 cd -
 
 ############################

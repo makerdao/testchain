@@ -7,9 +7,6 @@
 [submodule "lib/maker-otc"]
 	path = lib/maker-otc
 	url = https://github.com/makerdao/maker-otc
-[submodule "lib/ds-proxy"]
-	path = lib/ds-proxy
-	url = https://github.com/dapphub/ds-proxy
 [submodule "lib/sai-proxy"]
 	path = lib/sai-proxy
 	url = https://github.com/makerdao/sai-proxy
@@ -19,9 +16,6 @@
 [submodule "lib/oasis-direct-proxy"]
 	path = lib/oasis-direct-proxy
 	url = https://github.com/makerdao/oasis-direct-proxy.git
-[submodule "lib/dss-proxy"]
-	path = lib/dss-proxy
-	url = https://github.com/makerdao/dss-proxy
-[submodule "lib/dss-deploy"]
-	path = lib/dss-deploy
-	url = https://github.com/makerdao/dss-deploy
+[submodule "lib/dss-proxy-actions"]
+	path = lib/dss-proxy-actions
+	url = https://github.com/makerdao/dss-proxy-actions

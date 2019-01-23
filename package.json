@@ -2,6 +2,6 @@
   "name": "@makerdao/testchain",
   "license": "UNLICENSED",
   "dependencies": {
-    "ganache-cli": "^6.1.8"
+    "ganache-cli": "^6"
   }
 }

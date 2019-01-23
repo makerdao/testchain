@@ -61,7 +61,7 @@ if ! nc -z 127.0.0.1 $PORT; then
   fi
 
   # Configure seth
-  export ETH_GAS=${ETH_GAS:-"4000000"}
+  export ETH_GAS=${ETH_GAS:-"6721975"} # Ganache's default block gas limit
   export SETH_STATUS=yes
   export ETH_RPC_ACCOUNTS=yes # Don't use ethsign
   export ETH_RPC_URL=http://127.1:$PORT
