@@ -30,7 +30,6 @@ function write_json
   "TAP": "$SAI_TAP",
   "TOP": "$SAI_TOP",
   "MAKER_OTC": "$OTC",
-  "DS_PROXY_FACTORY": "$DS_PROXY_FACTORY",
   "PROXY_REGISTRY": "$PROXY_REGISTRY",
   "DS_PROXY": "$DS_PROXY",
   "SAI_PROXY": "$SAI_PROXY",
@@ -69,7 +68,6 @@ export TUB="$SAI_TUB"
 export TAP="$SAI_TAP"
 export TOP="$SAI_TOP"
 export MAKER_OTC="$OTC"
-export DS_PROXY_FACTORY="$DS_PROXY_FACTORY"
 export PROXY_REGISTRY="$PROXY_REGISTRY"
 export DS_PROXY="$DS_PROXY"
 export SAI_PROXY="$SAI_PROXY"
@@ -105,7 +103,6 @@ tub: "$SAI_TUB"
 tap: "$SAI_TAP"
 top: "$SAI_TOP"
 maker_otc: "$OTC"
-ds_proxy_factory: "$DS_PROXY_FACTORY"
 proxy_registry: "$PROXY_REGISTRY"
 ds_proxy: "$DS_PROXY"
 sai_proxy: "$SAI_PROXY"
@@ -322,7 +319,6 @@ function write_template
   sed -i -e "s/{{TESTCHAIN_SAI_TAP}}/$SAI_TAP/g" $1
   sed -i -e "s/{{TESTCHAIN_SAI_TOP}}/$SAI_TOP/g" $1
   sed -i -e "s/{{TESTCHAIN_OTC}}/$OTC/g" $1
-  sed -i -e "s/{{TESTCHAIN_DS_PROXY_FACTORY}}/$DS_PROXY_FACTORY/g" $1
   sed -i -e "s/{{TESTCHAIN_PROXY_REGISTRY}}/$PROXY_REGISTRY/g" $1
   sed -i -e "s/{{TESTCHAIN_DS_PROXY}}/$DS_PROXY/g" $1
   sed -i -e "s/{{TESTCHAIN_SAI_PROXY}}/$SAI_PROXY/g" $1
