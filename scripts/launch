@@ -15,13 +15,14 @@ otherargs=()
 while [[ "$#" > 0 ]]; do case $1 in
   --ci) ci=1;;
   -d|--deploy) deploy=1;;
-  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   --fast) fast=1;;
-  --reset-chaindata) reset_chaindata=1;;
+  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   -p|--port) PORT="$2"; shift;;
+  --reset-chaindata) reset_chaindata=1;;
   -s|--snapshot) snapshot="$2"; shift;;
-  -u | --skip-update) SKIP_SUBMODULE_UPDATE=1;;
   --template) TEMPLATE="$2"; shift;;
+  --throw-revert) throw_revert=1;;
+  -u | --skip-update) SKIP_SUBMODULE_UPDATE=1;;
   --verbose) verbose=1;;
   *) otherargs+=($1);;
 esac; shift; done
@@ -76,16 +77,23 @@ if ! nc -z 127.0.0.1 $PORT; then
   fi
 
   echo "Starting Ganache..."
+  ganache_args=(
+    $GANACHE_CLI
+    -i 999
+    -p $PORT
+    -a 1
+    -m "hill law jazz limb penalty escape public dish stand bracket blue jar"
+    --db $VAR/chaindata
+  )
+
+  if [ ! $throw_revert ]; then
+    ganache_args+=(--noVMErrorsOnRPCResponse)
+  fi
+
   if [ $verbose ]; then
-    $GANACHE_CLI --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
-      -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
-      --db $VAR/chaindata \
-      2>&1 & netpid=$!
+    "${ganache_args[@]}" 2>&1 & netpid=$!
   else
-    $GANACHE_CLI --noVMErrorsOnRPCResponse -i 999 -p $PORT -a 1000 \
-      -m "hill law jazz limb penalty escape public dish stand bracket blue jar" \
-      --db $VAR/chaindata \
-      > $VAR/ganache.out 2>&1 & netpid=$!
+    "${ganache_args[@]}" > $VAR/ganache.out 2>&1 & netpid=$!
   fi
 
   # Wait for the testnet to become responsive
