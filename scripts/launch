@@ -81,7 +81,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     $GANACHE_CLI
     -i 999
     -p $PORT
-    -a 1
+    -a 1000
     -m "hill law jazz limb penalty escape public dish stand bracket blue jar"
     --db $VAR/chaindata
   )
