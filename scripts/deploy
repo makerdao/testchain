@@ -43,8 +43,8 @@ if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" &
 else
   echo "Deploying sai contracts..."
 fi
-bin/deploy-fab 2> /dev/null && . load-fab-unknown
-bin/deploy 2> /dev/null     && . load-env-unknown
+bin/deploy-fab && . load-fab-unknown
+bin/deploy     && . load-env-unknown
 
 # Set the ETH price feed to 400 USD
 seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
@@ -64,7 +64,7 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/MatchingMarket.abi ]; then
   echo "Skipping dapp build for maker-otc (already built)"
 else
   echo "Building maker-otc..."
-  dapp build 2> /dev/null
+  dapp build
 fi
 echo "Deploying maker-otc (MatchingMarket)..."
 OTC=$(dapp create MatchingMarket 1577836800) # This is some random date in 2020
@@ -103,7 +103,7 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/SaiProxyCreateAndExecute.ab
   echo "Skipping dapp build for sai-proxy (already built)"
 else
   echo "Building sai-proxy..."
-  dapp build 2> /dev/null
+  dapp build
 fi
 echo "Deploying sai-proxy (SaiProxyCreateAndExecute)..."
 SAI_PROXY=$(dapp create SaiProxyCreateAndExecute)
@@ -118,7 +118,7 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyCreationAndExecute.abi
   echo "Skipping dapp build for oasis-direct-proxy (already built)"
 else
   echo "Building oasis-direct-proxy..."
-  dapp build 2> /dev/null
+  dapp build
 fi
 echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
 OASIS_PROXY=$(dapp create ProxyCreationAndExecute $SAI_GEM)
