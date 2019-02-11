@@ -80,7 +80,7 @@ if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyRegistry.abi ]; then
   echo "Skipping dapp build for proxy-registry (already built)"
 else
   echo "Building proxy-registry..."
-  dapp --use solc:0.5.0 build ProxyRegistry 2>/dev/null
+  dapp --use solc:0.5.0 build ProxyRegistry
 fi
 echo "Deploying ProxyRegistry and DSProxyFactory..."
 DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
