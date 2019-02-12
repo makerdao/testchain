@@ -130,6 +130,7 @@ cd -
 
 echo "Deploying MCD..."
 cd $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/
+export DAPP_SOLC_VERSION=0.5.0
 source bin/deploy-all
 cd -
 
@@ -152,23 +153,7 @@ cd -
 mkdir -p $OUT
 source $CWD/output
 
-case "$DEPLOYMENT_OUTPUT" in
-  json)
-    write_json "$OUT/addresses.json"
-    write_json_mcd "$OUT/addresses-mcd.json"
-    ;;
-  yaml|yml)
-    write_yaml "$OUT/addresses.yaml"
-    write_yaml_mcd "$OUT/addresses-mcd.yaml"
-    ;;
-  env)
-    write_env "$OUT/addresses"
-    write_env_mcd "$OUT/addresses-mcd"
-    ;;
-  *)
-    copy_template "$TEMPLATE" "$DEPLOYMENT_OUTPUT"
-    write_template "$DEPLOYMENT_OUTPUT"
-    ;;
-esac
+write_json "$OUT/addresses.json"
+write_json_mcd "$OUT/addresses-mcd.json"
 
 $CWD/collect-abis
