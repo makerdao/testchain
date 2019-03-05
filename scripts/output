@@ -72,7 +72,6 @@ function write_json_mcd
   "MCD_MOVE_DGX": "$MCD_MOVE_DGX",
   "MCD_MOVE_ETH": "$MCD_MOVE_ETH",
   "MCD_MOVE_REP": "$MCD_MOVE_REP",
-  "MCD_PIT": "$MCD_PIT",
   "MCD_POT": "$MCD_POT",
   "MCD_PROXY_ACTIONS": "$MCD_PROXY_ACTIONS",
   "MCD_SPOT": "$MCD_SPOT",

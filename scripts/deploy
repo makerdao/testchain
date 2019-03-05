@@ -135,7 +135,7 @@ source bin/deploy-all
 cd -
 
 cd $LIB/dss-proxy-actions
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/CdpRegistry.abi ]; then
+if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/DssCdpManager.abi ]; then
   echo "Skipping dapp build for CdpManager"
 else
   echo "Building CdpManager..."
