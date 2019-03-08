@@ -47,11 +47,11 @@ function write_json_mcd
   echo "Publishing output into $1"
   cat > $1 <<- EOM
 {
+  "CDP_MANAGER": "$CDP_MANAGER",
   "DGX": "$DGX",
   "ETH_FROM": "$ETH_FROM",
   "MCD_ADM": "$MCD_ADM",
   "MCD_CAT": "$MCD_CAT",
-  "MCD_CDP_MANAGER": "$MCD_CDP_MANAGER",
   "MCD_DAI": "$MCD_DAI",
   "MCD_DAI_GUARD": "$MCD_DAI_GUARD",
   "MCD_DEPLOY": "$MCD_DEPLOY",
@@ -73,14 +73,15 @@ function write_json_mcd
   "MCD_MOVE_ETH": "$MCD_MOVE_ETH",
   "MCD_MOVE_REP": "$MCD_MOVE_REP",
   "MCD_POT": "$MCD_POT",
-  "MCD_PROXY_ACTIONS": "$MCD_PROXY_ACTIONS",
   "MCD_SPOT": "$MCD_SPOT",
   "MCD_VAT": "$MCD_VAT",
   "MCD_VOW": "$MCD_VOW",
   "PIP_DGX": "$PIP_DGX",
   "PIP_ETH": "$PIP_ETH",
   "PIP_REP": "$PIP_REP",
-  "REP": "$REP"
+  "PROXY_ACTIONS": "$PROXY_ACTIONS",
+  "REP": "$REP",
+  "WETH": "$ETH"
 }
 EOM
 
