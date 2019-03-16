@@ -7,20 +7,18 @@ LIB=$CWD/../lib
 VAR=$CWD/../var
 OUT=$CWD/../out
 PORT=2000
-DEPLOYMENT_OUTPUT=json
-TEMPLATE=""
 
 # parse arguments
 otherargs=()
 while [[ "$#" > 0 ]]; do case $1 in
   --ci) ci=1;;
   -d|--deploy) deploy=1;;
+  --deploy-mcd-only) deploy_mcd_only=1;;
+  --deploy-scd-only) deploy_scd_only=1;;
   --fast) fast=1;;
-  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   -p|--port) PORT="$2"; shift;;
   --reset-chaindata) reset_chaindata=1;;
   -s|--snapshot) snapshot="$2"; shift;;
-  --template) TEMPLATE="$2"; shift;;
   --throw-revert) throw_revert=1;;
   -u | --skip-update) SKIP_SUBMODULE_UPDATE=1;;
   --verbose) verbose=1;;
@@ -116,7 +114,10 @@ if ! nc -z 127.0.0.1 $PORT; then
     if [ "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
       echo "Skipping build of dapps that are already built."
     fi
-    $CWD/deploy -p "$PORT" -o "$DEPLOYMENT_OUTPUT" --template "$TEMPLATE"
+    deploy_args=($CWD/deploy)
+    if [ "$deploy_mcd_only" ]; then deploy_args+=(--mcd-only); fi
+    if [ "$deploy_scd_only" ]; then deploy_args+=(--scd-only); fi
+    "${deploy_args[@]}"
   fi
 
   END_TIME=`date +%s`

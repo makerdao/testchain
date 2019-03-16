@@ -4,156 +4,19 @@ set -e
 CWD="${0%/*}"
 LIB=$CWD/../lib
 OUT=$CWD/../out
-DEPLOYMENT_OUTPUT=json
-TEMPLATE=""
-PORT=2000
 
 # parse arguments
 while [[ "$#" > 0 ]]; do case $1 in
-  -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
-  -p|--port) PORT="$2"; shift;;
-  --template) TEMPLATE="$2"; shift;;
+  --scd-only) SCD_ONLY=1;;
+  --mcd-only) MCD_ONLY=1;;
 esac; shift; done
 
-# Pre check output format before doing something
-if ! [[ "$DEPLOYMENT_OUTPUT" =~ ^(json|env|yaml|yml)$ ]]; then
-  if [ ! -f "$TEMPLATE" ]; then
-    echo "Template file $TEMPLATE - does not exist"
-    exit 1
-  fi
+if [ -z $MCD_ONLY ]; then
+  . $CWD/deploy-scd
+  deploy_scd
 fi
 
-function sed_inplace {
-  # sed's -i argument behaves differently on macOS, hence this hack
-  sed -i.bak "$1" $2 && rm $2.bak
-}
-
-############################
-# build sai system
-
-# Fix sai deploy script
-sed_inplace '13s/DSToken.*/WETH9)/' $LIB/sai/bin/deploy
-# Change sai deploy scripts (deploy and deploy-fab) to skip dapp build if SKIP_BUILD_IF_ALREADY_BUILT is set and dapp is already built
-sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
-sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
-
-cd $LIB/sai
-if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" && ! -f out/SaiTop.abi ) ]]; then
-  echo "Building and deploying sai contracts..."
-else
-  echo "Deploying sai contracts..."
+if [ -z $SCD_ONLY ]; then
+  . $CWD/deploy-mcd
+  deploy_mcd
 fi
-bin/deploy-fab && . load-fab-unknown
-bin/deploy     && . load-env-unknown
-
-# Set the ETH price feed to 400 USD
-seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
-# Set the MKR price feed to 1040.49 USD
-seth send $SAI_PEP "poke(bytes32)" 0x00000000000000000000000000000000000000000000003867bb3260a7cf7200
-seth send $SAI_MOM "setCap(uint256)" $(seth --to-uint256 $(seth --to-wei 1000 eth))
-# Mint MKR, owned by default account
-seth send $SAI_GOV "mint(uint256)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
-cd -
-
-############################
-# build oasis
-
-export SOLC_FLAGS=${SOLC_FLAGS:-"--optimize"}
-cd $LIB/maker-otc
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/MatchingMarket.abi ]; then
-  echo "Skipping dapp build for maker-otc (already built)"
-else
-  echo "Building maker-otc..."
-  dapp --use solc:0.4.25 build
-fi
-echo "Deploying maker-otc (MatchingMarket)..."
-OTC=$(dapp create MatchingMarket 1577836800) # This is some random date in 2020
-addr1=$SAI_GEM
-addr2=$SAI_SAI
-cd -
-
-############################
-# build proxy registry
-
-cd $LIB/proxy-registry
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyRegistry.abi ]; then
-  echo "Skipping dapp build for proxy-registry (already built)"
-else
-  echo "Building proxy-registry..."
-  dapp --use solc:0.5.0 build ProxyRegistry
-fi
-echo "Deploying ProxyRegistry and DSProxyFactory..."
-DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
-echo "Deployed DSProxyFactory to $DS_PROXY_FACTORY"
-
-PROXY_REGISTRY=$(dapp create ProxyRegistry $DS_PROXY_FACTORY)
-echo "Deployed ProxyRegistry to $PROXY_REGISTRY"
-
-echo "Creating DSProxy via ProxyRegistry.build()..."
-DS_PROXY="0x"$(seth --abi-decode "build()(address)" $(seth call $PROXY_REGISTRY "build()")) # Get expected address of new DSProxy instance about to be created
-seth send $PROXY_REGISTRY "build()"
-echo "Created new DSProxy instance with address: $DS_PROXY"
-cd -
-
-############################
-# build sai proxy
-
-cd $LIB/sai-proxy
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/SaiProxyCreateAndExecute.abi ]; then
-  echo "Skipping dapp build for sai-proxy (already built)"
-else
-  echo "Building sai-proxy..."
-  dapp --use solc:0.4.25 build
-fi
-echo "Deploying sai-proxy (SaiProxyCreateAndExecute)..."
-SAI_PROXY=$(dapp create SaiProxyCreateAndExecute)
-echo "Deployed SaiProxyCreateAndExecute to $SAI_PROXY"
-cd -
-
-############################
-# build oasis proxy
-
-cd $LIB/oasis-direct-proxy
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyCreationAndExecute.abi ]; then
-  echo "Skipping dapp build for oasis-direct-proxy (already built)"
-else
-  echo "Building oasis-direct-proxy..."
-  dapp --use solc:0.4.25 build
-fi
-echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
-OASIS_PROXY=$(dapp create ProxyCreationAndExecute $SAI_GEM)
-echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
-cd -
-
-############################
-# build MCD
-
-echo "Deploying MCD..."
-cd $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/
-export DAPP_SOLC_VERSION=0.5.0
-source bin/deploy-all
-cd -
-
-cd $LIB/dss-proxy-actions
-if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/DssCdpManager.abi ]; then
-  echo "Skipping dapp build for CdpManager"
-else
-  echo "Building CdpManager..."
-  dapp --use solc:0.5.0 build
-fi
-echo "Deploying CdpManager..."
-CDP_MANAGER=$(dapp create DssCdpManager)
-PROXY_ACTIONS=$(dapp create DssProxyActions)
-MCD_MOM_LIB=$(dapp create MomLib)
-cd -
-
-############################
-# store outputs for apps to use
-
-mkdir -p $OUT
-source $CWD/output
-
-write_json "$OUT/addresses.json"
-write_json_mcd "$OUT/addresses-mcd.json"
-
-$CWD/collect-abis
