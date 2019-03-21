@@ -17,6 +17,7 @@ function write_json_mcd {
   "CDP_MANAGER": "$CDP_MANAGER",
   "ETH": "$ETH",
   "ETH_FROM": "$ETH_FROM",
+  "GET_CDPS": "$GET_CDPS",
   "MCD_ADM": "$MCD_ADM",
   "MCD_CAT": "$MCD_CAT",
   "MCD_DAI": "$MCD_DAI",
@@ -89,6 +90,7 @@ function deploy_mcd {
   CDP_MANAGER=$(dapp create DssCdpManager)
   PROXY_ACTIONS=$(dapp create DssProxyActions)
   MCD_MOM_LIB=$(dapp create MomLib)
+  GET_CDPS=$(dapp create GetCdps)
   cd -
 
   write_json_mcd "$OUT/addresses-mcd.json"
