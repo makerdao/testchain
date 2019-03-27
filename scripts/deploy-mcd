@@ -72,14 +72,15 @@ EOM
 
 function deploy_mcd {
   echo "Deploying MCD..."
-  cd $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/
+  DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
+  cd $DPA/lib/dss-cdp-manager/lib/dss-deploy/
   export DAPP_SOLC_VERSION=0.5.0
   . bin/deploy-all
   . bin/deploy-ilk-col1 B
   . bin/deploy-ilk-eth B
   cd -
 
-  cd $LIB/dss-proxy-actions
+  cd $DPA
   if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/DssCdpManager.abi ]; then
     echo "Skipping dapp build for CdpManager"
   else
@@ -97,14 +98,40 @@ function deploy_mcd {
 
   mkdir -p $OUT/mcd
 
-  ls $LIB/dss-proxy-actions/out/*.abi | \
-    grep -v -E "(Fab|Dev|Test|Like|t_sol)" | \
+  ls $DPA/out/*.abi \
+    $DPA/lib/dss-cdp-manager/lib/dss-deploy/out/*.abi | \
+    grep -v -E "(Fab|Dev|Test|Like|t_sol|lib_|src_)" | \
     xargs sh -c "cp \$@ $OUT/mcd" placeholder
-
-  ls $LIB/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/out/*.abi | \
-    grep -v -E "(Fab|Dev|Test|Like|t_sol)" | \
-    xargs sh -c "cp \$@ $OUT/mcd" placeholder
-
   # for an explanation of the placeholder arg above, see:
   # https://en.wikipedia.org/wiki/Xargs#Shell_trick
+}
+
+function deploy_mcd_tdds {
+  TDDS=$LIB/testchain-dss-deployment-scripts
+  cd $TDDS
+
+  # change price feeds to DSValue so we can set prices from within tests
+  TMP=$(mktemp)
+  jq '.tokens[].pip.type = "value"' step-1.json > $TMP && mv $TMP step-1.json
+
+  ./step-1-deploy
+  cd -
+
+  # uncomment below to add more ilks
+  # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
+  # cd $DPA/lib/dss-cdp-manager/lib/dss-deploy/
+  # export DAPP_SOLC_VERSION=0.5.0
+  # . bin/deploy-ilk-col1 B
+  # . bin/deploy-ilk-eth B
+  # cd -
+
+  ls \
+    $TDDS/out/abi/* \
+    $TDDS/contracts/dss-proxy-actions/out/*.abi \
+    $TDDS/contracts/dss-proxy-actions/lib/dss-cdp-manager/lib/dss-deploy/out/*.abi | \
+    grep -v -E "(Fab|Dev|Test|Like|t_sol|lib_|src_)" | \
+    xargs sh -c "cp \$@ $OUT/mcd" placeholder
+  # why the placeholder? see https://en.wikipedia.org/wiki/Xargs#Shell_trick
+
+  jq -S . $TDDS/out/addresses.json > $OUT/addresses-mcd.json
 }
