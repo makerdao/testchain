@@ -106,15 +106,28 @@ function deploy_mcd {
   # https://en.wikipedia.org/wiki/Xargs#Shell_trick
 }
 
+function jq_inplace {
+  TMP=$(mktemp)
+  jq "$1" "$2" > $TMP && mv $TMP "$2"
+}
+
 function deploy_mcd_tdds {
   TDDS=$LIB/testchain-dss-deployment-scripts
   cd $TDDS
 
   # change price feeds to DSValue so we can set prices from within tests
   TMP=$(mktemp)
-  jq '.tokens[].pip.type = "value"' step-1.json > $TMP && mv $TMP step-1.json
+  jq_inplace '.tokens[].pip.type = "value"' step-1.json
 
-  ./step-1-deploy
+  # step 1 only
+  # ./step-1-deploy
+
+  # step 4
+  jq_inplace '.tokens[].pip.type = "value"' step-4.json
+  jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
+  jq_inplace '.tokens.COL1.pip.price = "234.56"' step-4.json
+  ./step-4-deploy
+
   cd -
 
   # uncomment below to add more ilks

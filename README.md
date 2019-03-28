@@ -12,13 +12,11 @@ Run `npm install` or `yarn install` to install Ganache.
 
 ## Basic usage
 
-Run `scripts/launch.sh`.
+Run `scripts/launch`.
 
 If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the chain data it finds in `var/chaindata`, and run until killed with Ctrl-C.
 
-If `var/chaindata` does not exist, the `default` snapshot will be used to create it.
-
-If you want to start the launch script with an empty snapshot, you will need to `mkdir -p testchain/var/chaindata` first.
+If `var/chaindata` does not exist, and the `--reset-chaindata` argument is not present, the `default` snapshot will be used to create it.
 
 Once the deployment is complete, you will find the list of contract addresses in the `out/addresses.json` file.
 
@@ -26,87 +24,32 @@ Once the deployment is complete, you will find the list of contract addresses in
 
 * `-s, --snapshot`: Optional. This should match the name of a folder under the `snapshots` folder. This will be copied to `var/chaindata`, overwriting anything there.
 
-* `-d, --deploy`: Optional. If set, `scripts/deploy.sh` will be run once Ganache is set up, to deploy contracts to the test chain.
+* `-d, --deploy`: Optional. If set, `scripts/deploy` will be run once Ganache is set up, to deploy contracts to the test chain.
 
-* `--fast`: Skip `git submodule update` and skip running `dapp build` for dapps that are already built. This is accomplished by setting the `SKIP_BUILD_IF_ALREADY_BUILT` environment variable, so the dapp build scripts must be written (or modified; see the use of `sed_inplace` in `deploy.sh`) to support it.
+* `--fast`: Skip `git submodule update` and skip running `dapp build` for dapps that are already built. This is accomplished by setting the `SKIP_BUILD_IF_ALREADY_BUILT` environment variable, so the dapp build scripts must be written (or modified; see the use of `sed_inplace` in `scripts/deploy`) to support it.
+
+* `--reset-chaindata`: Start the testchain with no data.
 
 * `-u, --skip-update`: Skip the git submodule updates, but still run `dapp build` on the contracts.
 
 * `-p, --port`: Start Ganache on a different port.
 
+* `--throw-revert`: Have Ganache throw an exception whenever a transaction is reverted.
+
 * `--ci`: If this is set, all unrecognized arguments will be treated as a new command. This command will be run, and Ganache will exit afterward.
-
-* `-o, --output`: Works only with `-d`. Will export deployed contracts to specified format. Available formats are: `json|env|yaml|template`
-
-* `--template`: Output configuration template. See [deployment output section](#deploying-changes-to-contract-code).
 
 ## Deploying changes to contract code
 
 When the deploy script is run, it copies ABI files and output addresses of deployment contracts to a file in `out/` directory. These can be copied into the source code of applications working with the test chain as you see fit.
 
-This output file can be in different formats depending on `-o, --output` option.
-
- * `-o json` - creates `out/addresses.json` file in JSON format
- * `-o env` - creates `out/addresses` file with bash script that exports the addresses as environment variables
- * `-o yaml` - creates `out/addresses.yaml` file in YAML format
- * `-o path/to/output/config.any --template path/to/config.template` - will copy config file to `path/to/output/config.any` and replace all placeholders there.
-
-### Configuration file template
-
-If you need to configure your application using a custom config file you could do this using config template.
-
-1. Create config template file somewhere ex: `your/project/path/config/local.template` with this content:
-```
-[database]
-name = "vulcanize_public"
-hostname = "localhost"
-port = 5432
-
-[client]
-ipcPath = "http://{{TESTCHAIN_HOST}}:{{TESTCHAIN_PORT}}"
-
-[contract]
-sai_gem = "{{TESTCHAIN_SAI_GEM}}"
-sai_pip = "{{TESTCHAIN_SAI_PIP}}"
-```
-
-2. Run launch script with `-d` deploy flag.
-
-```bash
-$ testchain/scripts/launch -d --template your/project/path/config/local.template -o your/project/path/config/local.toml
-```
-
-This command will copy `local.template` content, replace all testchain variables and place new fullfilled config file to `your/project/path/config/local.toml`
-
-If such file already exist, script will ask you to delete it first.
-
-### Testchain template variables
-
-| Name | Description | Default value |
-| ---- | ----------- | ------------- |
-| TESTCHAIN_HOST | testchain host | `127.0.0.1`  |
-| TESTCHAIN_PORT | testchain port | `2000` |
-| TESTCHAIN_SAI_GEM | contract address |  |
-| TESTCHAIN_SAI_GOV | contract address |  |
-| TESTCHAIN_SAI_PIP | contract address |  |
-| TESTCHAIN_SAI_PEP | contract address |  |
-| TESTCHAIN_SAI_PIT | contract address |  |
-| TESTCHAIN_SAI_ADM | contract address |  |
-| TESTCHAIN_SAI_SAI | contract address |  |
-| TESTCHAIN_SAI_SIN | contract address |  |
-| TESTCHAIN_SAI_SKR | contract address |  |
-| TESTCHAIN_SAI_DAD | contract address |  |
-| TESTCHAIN_SAI_MOM | contract address |  |
-| TESTCHAIN_SAI_VOX | contract address |  |
-| TESTCHAIN_SAI_TUB | contract address |  |
-| TESTCHAIN_SAI_TAP | contract address |  |
-| TESTCHAIN_SAI_TOP | contract address |  |
-| TESTCHAIN_OTC | contract address |  |
-| TESTCHAIN_DS_PROXY_FACTORY | contract address |  |
-| TESTCHAIN_PROXY_REGISTRY | contract address |  |
-| TESTCHAIN_DS_PROXY | contract address |  |
-| TESTCHAIN_SAI_PROXY | contract address |  |
-
 ## Creating new snapshots
 
 Use `scripts/create-snapshot NAME` to copy the contents of `var/chaindata` into a new folder `snapshots/NAME`. Add `--force` if you want to replace an existing snapshot.
+
+## Recipe: rebuilding MCD
+
+```
+./scripts/launch -s scd-only --deploy --deploy-mcd-only
+```
+
+This starts with a snapshot of all the SCD contracts, and then redeploys all the MCD contracts on top of that snapshot. Edit `scripts/deploy-mcd` to tweak the build parameters or add to it.
