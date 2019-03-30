@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-CWD="${0%/*}"
-LIB=$CWD/../lib
-OUT=$CWD/../out
+CWD=$(cd "${0%/*}" && pwd)
+LIB=$(cd "${CWD}/../lib" && pwd)
+OUT=$(cd "${CWD}/../out" && pwd)
 
 # parse arguments
 while [[ "$#" > 0 ]]; do case $1 in
