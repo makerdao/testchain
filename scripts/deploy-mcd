@@ -120,15 +120,18 @@ function deploy_mcd_tdds {
   jq_inplace '.tokens[].pip.type = "value"' step-1.json
 
   # step 1 only
-  # ./step-1-deploy
+  ./step-1-deploy
 
   # step 4
-  jq_inplace '.tokens[].pip.type = "value"' step-4.json
-  jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
-  jq_inplace '.tokens.COL1.pip.price = "234.56"' step-4.json
-  ./step-4-deploy
+  # jq_inplace '.tokens[].pip.type = "value"' step-4.json
+  # jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
+  # jq_inplace '.tokens.COL1.pip.price = "234.56"' step-4.json
+  # ./step-4-deploy
 
-  cd -
+  # add median for testing
+  cd $TDDS/contracts/median
+  PIP_ETH_MEDIAN=$(dapp create Median "$(seth --to-bytes32 "$(seth --from-ascii "${token}USD")")")
+  jq_inplace ".PIP_ETH_MEDIAN = \"${PIP_ETH_MEDIAN}\"" $TDDS/out/addresses.json
 
   # uncomment below to add more ilks
   # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
@@ -136,7 +139,6 @@ function deploy_mcd_tdds {
   # export DAPP_SOLC_VERSION=0.5.0
   # . bin/deploy-ilk-col1 B
   # . bin/deploy-ilk-eth B
-  # cd -
 
   ls \
     $TDDS/out/abi/* \
@@ -147,4 +149,5 @@ function deploy_mcd_tdds {
   # why the placeholder? see https://en.wikipedia.org/wiki/Xargs#Shell_trick
 
   jq -S . $TDDS/out/addresses.json > $OUT/addresses-mcd.json
+  cd -
 }
