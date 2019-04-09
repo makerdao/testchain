@@ -10,7 +10,13 @@ Requires [Seth](https://dapp.tools/seth/), [Nix](https://github.com/NixOS/nix), 
 
 Run `npm install` or `yarn install` to install Ganache.
 
-## Basic usage
+## Typical usage
+
+```
+scripts/launch -s default --fast
+```
+
+## Usage
 
 Run `scripts/launch`.
 
