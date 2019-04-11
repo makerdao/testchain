@@ -26,6 +26,9 @@ function deploy_mcd_tdds {
   # step 1 only
   ./step-1-deploy
 
+  # set MCD_ADM back to ETH_FROM
+  seth send "$MCD_ADM" 'lift(address)' "$ETH_FROM"
+
   # step 4
   # jq_inplace '.tokens[].pip.type = "value"' step-4.json
   # jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
