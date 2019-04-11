@@ -24,9 +24,10 @@ function deploy_mcd_tdds {
   sed_inplace 's/10000 eth/1 eth/' step-1-deploy
 
   # step 1 only
-  ./step-1-deploy
+  source ./step-1-deploy
 
   # set MCD_ADM back to ETH_FROM
+  seth send "$MCD_ADM" 'vote(address[] memory)' ["${ETH_FROM#0x}"]
   seth send "$MCD_ADM" 'lift(address)' "$ETH_FROM"
 
   # step 4
