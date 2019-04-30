@@ -74,10 +74,9 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-ganache-cli@^6.4:
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/ganache-cli/-/ganache-cli-6.4.2.tgz#4db8663b01c023b389dcafc447d6e7fcc0b52712"
-  integrity sha512-2hZY5xjvfVI2fvTtqQwzW5kgiqv6gtOONdqnNfBO38GGwQIZKdZCeQNwpFHZTUqPZ/hVwT4u5J5WUYyP3fG2YA==
+ganache-cli@makerdao/ganache-cli#fix/gas-est-crash:
+  version "6.4.3-beta.0"
+  resolved "https://codeload.github.com/makerdao/ganache-cli/tar.gz/3e512b61da2479042627e6155231dcb038110650"
   dependencies:
     bn.js "4.11.8"
     source-map-support "0.5.9"
