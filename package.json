@@ -2,6 +2,6 @@
   "name": "@makerdao/testchain",
   "license": "MIT",
   "dependencies": {
-    "ganache-cli": "^6"
+    "ganache-cli": "makerdao/ganache-cli#fix/gas-est-crash"
   }
 }
