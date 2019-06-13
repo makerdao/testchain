@@ -24,24 +24,24 @@ function deploy_mcd_tdds {
   sed_inplace 's/10000 eth/1 eth/' step-1-deploy
 
   # step 1 only
-  # ./step-1-deploy
+  ./step-1-deploy
 
-  # MCD_GOV=$(jq -r ".MCD_GOV" "$TDDS/out/addresses.json")
-  # MCD_ADM=$(jq -r ".MCD_ADM" "$TDDS/out/addresses.json")
-  # ETH_FROM=$(jq -r ".ETH_FROM" "$TDDS/out/addresses.json")
+  MCD_GOV=$(jq -r ".MCD_GOV" "$TDDS/out/addresses.json")
+  MCD_ADM=$(jq -r ".MCD_ADM" "$TDDS/out/addresses.json")
+  ETH_FROM=$(jq -r ".ETH_FROM" "$TDDS/out/addresses.json")
 
   # set MCD_ADM back to ETH_FROM
-  # seth send "$MCD_GOV" 'approve(address,uint256)' "$MCD_ADM" 1
-  # seth send "$MCD_GOV" 'mint(uint256)' 1
-  # seth send "$MCD_ADM" 'lock(uint256)' 1
-  # seth send "$MCD_ADM" 'vote(address[] memory)' ["${ETH_FROM#0x}"]
-  # seth send "$MCD_ADM" 'lift(address)' "$ETH_FROM"
+  seth send "$MCD_GOV" 'approve(address,uint256)' "$MCD_ADM" 1
+  seth send "$MCD_GOV" 'mint(uint256)' 1
+  seth send "$MCD_ADM" 'lock(uint256)' 1
+  seth send "$MCD_ADM" 'vote(address[] memory)' ["${ETH_FROM#0x}"]
+  seth send "$MCD_ADM" 'lift(address)' "$ETH_FROM"
 
   # step 4
-  jq_inplace '.tokens[].pip.type = "value"' step-4.json
-  jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
-  jq_inplace '.tokens.COL1.pip.price = "234.56"' step-4.json
-  ./step-4-deploy
+  # jq_inplace '.tokens[].pip.type = "value"' step-4.json
+  # jq_inplace '.tokens.ETH.pip.price = "123.45"' step-4.json
+  # jq_inplace '.tokens.COL1.pip.price = "234.56"' step-4.json
+  # ./step-4-deploy
 
   # uncomment below to add more ilks
   # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
