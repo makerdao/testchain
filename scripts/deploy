@@ -18,5 +18,5 @@ fi
 
 if [ -z $SCD_ONLY ]; then
   . $CWD/deploy-mcd
-  deploy_mcd_tdds
+  deploy_mcd_dds
 fi
