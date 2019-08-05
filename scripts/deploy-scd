@@ -34,7 +34,8 @@ function write_json_scd {
   "PROXY_REGISTRY": "$PROXY_REGISTRY",
   "DS_PROXY": "$DS_PROXY",
   "SAI_PROXY": "$SAI_PROXY",
-  "OASIS_PROXY": "$OASIS_PROXY"
+  "OASIS_PROXY": "$OASIS_PROXY",
+  "REDEEMER": "$REDEEMER"
 }
 EOM
 }
@@ -134,6 +135,21 @@ function deploy_scd {
   echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
   cd -
 
+  ############################
+  # build maker redeemer
+
+  cd $LIB/maker-499
+  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/Redeemer.abi ]; then
+    echo "Skipping dapp build for MKR redeemer (already built)"
+  else
+    echo "Building MKR redeemer..."
+    dapp --use solc:0.4.25 build
+  fi
+  echo "Deploying MKR redeemer..."
+  REDEEMER=$(dapp create Redeemer)
+  echo "Deployed MKR redeemer to $REDEEMER"
+  cd -
+
   mkdir -p $OUT
   write_json_scd "$OUT/addresses.json"
 
@@ -143,6 +159,7 @@ function deploy_scd {
   $LIB/proxy-registry/out/DSProxy.abi \
   $LIB/proxy-registry/out/DSProxyFactory.abi \
   $LIB/oasis-direct-proxy/out/ProxyCreationAndExecute.abi \
+  $LIB/maker-499/out/Redeemer.abi \
   $OUT
 
   ls $LIB/sai/out/*.abi | \

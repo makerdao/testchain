@@ -19,3 +19,6 @@
 [submodule "lib/dss-deploy-scripts"]
 	path = lib/dss-deploy-scripts
 	url = https://github.com/makerdao/dss-deploy-scripts.git
+[submodule "lib/maker-499"]
+	path = lib/maker-499
+	url = https://github.com/makerdao/maker-499.git
