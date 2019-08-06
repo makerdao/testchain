@@ -6,7 +6,6 @@
     "out",
     "scripts",
     "snapshots",
-    "var",
     "yarn.lock"
   ],
   "dependencies": {
