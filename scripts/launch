@@ -55,6 +55,11 @@ if ! nc -z 127.0.0.1 $PORT; then
 
   if [ -n "$SKIP_SUBMODULE_UPDATE" ]; then
     echo "Skipping git submodule update."
+  elif [ deploy_mcd_only ]; then
+    echo "Updating mcd submodules only."
+    cd ./lib/dss-deploy-scripts
+    git submodule update --init --recursive
+    cd -
   else
     git submodule update --init --recursive
   fi
