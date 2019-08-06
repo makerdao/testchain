@@ -35,7 +35,7 @@ function write_json_scd {
   "DS_PROXY": "$DS_PROXY",
   "SAI_PROXY": "$SAI_PROXY",
   "OASIS_PROXY": "$OASIS_PROXY",
-  "REDEEMER": "$REDEEMER"
+  "REDEEMER": "$REDEEMER",
   "OLD_MKR": "$OLD_MKR"
 }
 EOM
