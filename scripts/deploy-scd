@@ -157,7 +157,7 @@ function deploy_scd {
     dapp --use solc:0.4.25 build
   fi
   echo "Deploying MKR redeemer..."
-  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV)
+  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 1000000000))
   echo "Deployed MKR redeemer to $REDEEMER"
   cd -
 
