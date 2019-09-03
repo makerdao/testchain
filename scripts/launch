@@ -82,7 +82,6 @@ if ! nc -z 127.0.0.1 $PORT; then
     -a 1000
     -l $ETH_GAS
     -m "hill law jazz limb penalty escape public dish stand bracket blue jar"
-    --acctKeys="./ganache-accounts.json"
     --db $VAR/chaindata
   )
 
