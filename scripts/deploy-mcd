@@ -21,7 +21,14 @@ function deploy_mcd_dds {
   # change deploy-testchain not to send 10000 ETH
   sed_inplace 's/10000 eth/1 eth/' deploy-testchain.sh
 
-  ./deploy-testchain.sh
+  # launch nix shell for deploy-scripts dependencies
+  # nix-shell -p bashInteractive --pure
+  # dapp2nix nix/dapp.nix
+  nix run -f $DDS -c deploy-testchain.sh
+
+  # KEYSTORE_PATH='../../keystore.json'
+
+  # ./deploy-testchain.sh
 
   # uncomment below to add more ilks
   # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
