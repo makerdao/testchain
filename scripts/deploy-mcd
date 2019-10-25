@@ -36,7 +36,7 @@ function deploy_mcd_dds {
     $DDS/out/abi/* \
     $DDS/contracts/dss-deploy/out/*.abi | \
     grep -v -E "(Fab|Dev|Test|Like|t_sol|lib_|src_)" | \
-    xargs sh -c "cp \$@ $OUT/mcd" placeholder
+    xargs sh -c "sudo cp \$@ $OUT/mcd" placeholder
   # why the placeholder? see https://en.wikipedia.org/wiki/Xargs#Shell_trick
 
   # sort addresses alphabetically
