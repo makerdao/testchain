@@ -2,7 +2,7 @@
 
 function jq_inplace {
   TMP=$(mktemp)
-  jq "$1" "$2" > $TMP && mv $TMP "$2"
+  jq "$1" > $TMP && mv $TMP "$2"
 }
 
 function sed_inplace {
@@ -21,13 +21,13 @@ function deploy_mcd_dds {
   # change deploy-testchain not to send 10000 ETH
   sed_inplace 's/10000 eth/1 eth/' deploy-testchain.sh
 
-  # deploy migration contracts with local tub
+  # deploy migration contracts with local tub and gem
   TUB=$(sudo cat $OUT/addresses.json | jq '.TUB')
   GEM=$(sudo cat $OUT/addresses.json | jq '.GEM')
-  DEPLOY=$LIB/dss-deploy-scripts/deploy-testchain.json
-  sudo cat $DEPLOY | jq --argjson migrationDeploy "$(<$LIB/deploy-migration.json)" '.migration = $migrationDeploy' > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
-  sudo cat $DEPLOY | jq ".migration.tub = $(echo $TUB)" > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
-  sudo cat $DEPLOY | jq ".tokens.ETH.gem = $(echo $GEM)" > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
+  DEPLOY=$DDS/deploy-testchain.json
+  sudo cat $DEPLOY | jq_inplace ".migration = $(<$LIB/deploy-migration.json)" $DEPLOY
+  sudo cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
+  sudo cat $DEPLOY | jq_inplace ".tokens.ETH.gem = $(echo $GEM)" $DEPLOY
 
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
