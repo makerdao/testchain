@@ -23,9 +23,11 @@ function deploy_mcd_dds {
 
   # deploy migration contracts with local tub
   TUB=$(sudo cat $OUT/addresses.json | jq '.TUB')
+  GEM=$(sudo cat $OUT/addresses.json | jq '.GEM')
   DEPLOY=$LIB/dss-deploy-scripts/deploy-testchain.json
   sudo cat $DEPLOY | jq --argjson migrationDeploy "$(<$LIB/deploy-migration.json)" '.migration = $migrationDeploy' > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
   sudo cat $DEPLOY | jq ".migration.tub = $(echo $TUB)" > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
+  sudo cat $DEPLOY | jq ".tokens.ETH.gem = $(echo $GEM)" > ./temp.json && mv ./temp.json $DEPLOY && rm -rf ./temp.json
 
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
