@@ -143,6 +143,7 @@ function deploy_scd {
 
   # deploy a DSToken stand-in for old MKR
   cd $LIB/ds-token
+  dapp update
   echo "Building old MKR token..."
   dapp build
   echo "Deploying old MKR token..."
@@ -167,6 +168,7 @@ function deploy_scd {
   # build old chief
 
   cd $LIB/ds-chief
+  dapp update
   dapp --use solc:0.5.0 build --extract
   export SETH_ASYNC=yes
   test -z $OLD_IOU && IOUtx=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'IOU')))
@@ -174,8 +176,11 @@ function deploy_scd {
   test -z $OLD_IOU && OLD_IOU=$(seth receipt $IOUtx contractAddress)
   MAX_YAYS=5
   OLD_CHIEF=$(dapp create DSChief $SAI_GOV $OLD_IOU $MAX_YAYS)
+  # echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  # echo $OLD_CHIEF
+  # echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   # CHIEF mints and burns IOUs, so it must be the owner of the token contract
-  seth send $IOU 'setOwner(address)' $OLD_CHIEF
+  seth send $OLD_IOU 'setOwner(address)' $OLD_CHIEF
   echo "Deployed old DSChief to $OLD_CHIEF and old IOU to $OLD_IOU"
 
   mkdir -p $OUT
@@ -188,7 +193,7 @@ function deploy_scd {
   $LIB/proxy-registry/out/DSProxyFactory.abi \
   $LIB/oasis-direct-proxy/out/ProxyCreationAndExecute.abi \
   $LIB/maker-499/out/Redeemer.abi \
-  $LIB/ERC20/out/ERC20.abi \
+  $LIB/ds-chief/out/DSChief.abi \
   $OUT
 
   ls $LIB/sai/out/*.abi | \
