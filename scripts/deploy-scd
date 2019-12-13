@@ -36,7 +36,9 @@ function write_json_scd {
   "SAI_PROXY": "$SAI_PROXY",
   "OASIS_PROXY": "$OASIS_PROXY",
   "REDEEMER": "$REDEEMER",
-  "OLD_MKR": "$OLD_MKR"
+  "OLD_MKR": "$OLD_MKR",
+  "OLD_CHIEF": "$OLD_CHIEF",
+  "OLD_IOU": "$OLD_IOU"
 }
 EOM
 }
@@ -160,6 +162,21 @@ function deploy_scd {
   REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
   echo "Deployed MKR redeemer to $REDEEMER"
   cd -
+
+  ############################
+  # build old chief
+
+  cd $LIB/ds-chief
+  dapp --use solc:0.5.0 build --extract
+  export SETH_ASYNC=yes
+  test -z $OLD_IOU && IOUtx=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'IOU')))
+  export SETH_ASYNC=no
+  test -z $OLD_IOU && OLD_IOU=$(seth receipt $IOUtx contractAddress)
+  MAX_YAYS=5
+  OLD_CHIEF=$(dapp create DSChief $SAI_GOV $OLD_IOU $MAX_YAYS)
+  # CHIEF mints and burns IOUs, so it must be the owner of the token contract
+  seth send $IOU 'setOwner(address)' $OLD_CHIEF
+  echo "Deployed old DSChief to $OLD_CHIEF and old IOU to $OLD_IOU"
 
   mkdir -p $OUT
   write_json_scd "$OUT/addresses.json"

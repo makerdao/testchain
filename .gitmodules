@@ -22,3 +22,6 @@
 [submodule "lib/maker-499"]
 	path = lib/maker-499
 	url = https://github.com/makerdao/maker-499.git
+[submodule "lib/ds-chief"]
+	path = lib/ds-chief
+	url = https://github.com/dapphub/ds-chief.git
