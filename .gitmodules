@@ -25,3 +25,6 @@
 [submodule "lib/ds-chief"]
 	path = lib/ds-chief
 	url = https://github.com/dapphub/ds-chief.git
+[submodule "lib/ds-token"]
+	path = lib/ds-token
+	url = https://github.com/dapphub/ds-token.git
