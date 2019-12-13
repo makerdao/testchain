@@ -28,3 +28,6 @@
 [submodule "lib/ds-token"]
 	path = lib/ds-token
 	url = https://github.com/dapphub/ds-token.git
+[submodule "lib/symbolic-voting"]
+	path = lib/symbolic-voting
+	url = https://github.com/makerdao/symbolic-voting.git
