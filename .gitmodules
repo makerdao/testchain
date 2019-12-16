@@ -31,3 +31,6 @@
 [submodule "lib/symbolic-voting"]
 	path = lib/symbolic-voting
 	url = https://github.com/makerdao/symbolic-voting.git
+[submodule "lib/vote-proxy"]
+	path = lib/vote-proxy
+	url = https://github.com/makerdao/vote-proxy.git
