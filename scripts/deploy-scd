@@ -82,7 +82,7 @@ function deploy_scd {
     dapp --use solc:0.4.25 build
   fi
   echo "Deploying maker-otc (MatchingMarket)..."
-  OTC=$(dapp create MatchingMarket 1577836800) # This is some random date in 2020
+  OTC=$(dapp create MatchingMarket 1893459661) # This is some random date in 2030
   addr1=$SAI_GEM
   addr2=$SAI_SAI
   cd -
