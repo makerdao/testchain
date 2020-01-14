@@ -52,6 +52,17 @@ function deploy_scd {
   sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
   sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
 
+  # deploy a DSToken stand-in for old MKR
+  cd $LIB/ds-token
+  dapp update
+  echo "Building old MKR token..."
+  dapp --use solc:0.4.25 build
+  echo "Deploying old MKR token..."
+  OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
+  echo "Deployed old MKR to $OLD_MKR"
+  seth send $OLD_MKR "mint(address,uint256)" $ETH_FROM 0x000000000000000000000000000000000000000000000015af1d78b58c400000
+  cd -
+
   cd $LIB/sai
   if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" && ! -f out/SaiTop.abi ) ]]; then
     echo "Building and deploying sai contracts..."
@@ -68,6 +79,21 @@ function deploy_scd {
   seth send $SAI_MOM "setCap(uint256)" $(seth --to-uint256 $(seth --to-wei 1000 eth))
   # Mint MKR, owned by default account
   seth send $SAI_GOV "mint(uint256)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
+  cd -
+
+  ############################
+  # build maker redeemer
+
+  cd $LIB/maker-499
+  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/Redeemer.abi ]; then
+    echo "Skipping dapp build for MKR redeemer (already built)"
+  else
+    echo "Building MKR redeemer..."
+    dapp --use solc:0.4.25 build
+  fi
+  echo "Deploying MKR redeemer..."
+  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
+  echo "Deployed MKR redeemer to $REDEEMER"
   cd -
 
   ############################
@@ -138,32 +164,6 @@ function deploy_scd {
   echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
   OASIS_PROXY=$(dapp create ProxyCreationAndExecute $SAI_GEM)
   echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
-  cd -
-
-  ############################
-  # build maker redeemer
-
-  # deploy a DSToken stand-in for old MKR
-  cd $LIB/ds-token
-  dapp update
-  echo "Building old MKR token..."
-  dapp build
-  echo "Deploying old MKR token..."
-  OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
-  echo "Deployed old MKR to $OLD_MKR"
-  seth send $OLD_MKR "mint(address,uint256)" $ETH_FROM 0x000000000000000000000000000000000000000000000015af1d78b58c400000
-  cd -
-
-  cd $LIB/maker-499
-  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/Redeemer.abi ]; then
-    echo "Skipping dapp build for MKR redeemer (already built)"
-  else
-    echo "Building MKR redeemer..."
-    dapp --use solc:0.4.16 build
-  fi
-  echo "Deploying MKR redeemer..."
-  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
-  echo "Deployed MKR redeemer to $REDEEMER"
   cd -
 
   ############################
