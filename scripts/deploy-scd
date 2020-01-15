@@ -147,7 +147,7 @@ function deploy_scd {
   cd $LIB/ds-token
   dapp update
   echo "Building old MKR token..."
-  dapp build
+  dapp --use solc:0.4.25 build
   echo "Deploying old MKR token..."
   OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
   echo "Deployed old MKR to $OLD_MKR"
@@ -159,7 +159,7 @@ function deploy_scd {
     echo "Skipping dapp build for MKR redeemer (already built)"
   else
     echo "Building MKR redeemer..."
-    dapp --use solc:0.4.16 build
+    dapp --use solc:0.4.25 build
   fi
   echo "Deploying MKR redeemer..."
   REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
