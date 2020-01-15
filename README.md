@@ -26,6 +26,30 @@ If `var/chaindata` does not exist, and the `--reset-chaindata` argument is not p
 
 Once the deployment is complete, you will find the list of contract addresses in the `out/addresses.json` file.
 
+## Creating a new snapshot
+
+If you want to add new contracts to the deployment scripts and create a new snapshot from the resulting deployment, you can run the following series of commands:
+
+```
+scripts/launch --reset-chaindata -d --deploy-scd-only -u
+scripts/create-snapshot scd-only --force
+scripts/launch -s scd-only -d --deploy-mcd-only -u
+scripts/create-snapshot default --force
+```
+
+The above series creates a separate snapshot with only the scd deployment simply to make updating mcd-specific code easier and faster. If this isn't relevant to your use case, you can omit those steps and run:
+
+```
+scripts/launch --reset-chaindata -d -u
+scripts/create-snapshot your-snapshot-name
+```
+
+Snapshot names are arbitrary, so in the above case, you could create another snapshot if necessary. The `--force` flag in the first example is only required if you're overwriting an existing snapshot.
+
+Also note that `-u` skips the submodule update, and can be omitted if you need to update before running the scripts.
+
+If you run the scd and mcd scripts separately, be careful to only include `--reset-chaindata` in the former. The mcd scripts depend on some of the chaindata from the scd scripts, and will fail without it. If you're running them both at the same time, like in the second example above, you can include it without causing any failures.
+
 ### Options
 
 * `-s, --snapshot`: Optional. This should match the name of a folder under the `snapshots` folder. This will be copied to `var/chaindata`, overwriting anything there.
