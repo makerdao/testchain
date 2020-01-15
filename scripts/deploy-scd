@@ -82,21 +82,6 @@ function deploy_scd {
   cd -
 
   ############################
-  # build maker redeemer
-
-  cd $LIB/maker-499
-  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/Redeemer.abi ]; then
-    echo "Skipping dapp build for MKR redeemer (already built)"
-  else
-    echo "Building MKR redeemer..."
-    dapp --use solc:0.4.25 build
-  fi
-  echo "Deploying MKR redeemer..."
-  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
-  echo "Deployed MKR redeemer to $REDEEMER"
-  cd -
-
-  ############################
   # build oasis
 
   export SOLC_FLAGS=${SOLC_FLAGS:-"--optimize"}
