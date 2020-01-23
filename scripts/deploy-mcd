@@ -14,7 +14,7 @@ function deploy_mcd_dds {
   DDS=$LIB/dss-deploy-scripts
   cd $DDS
 
-  export MCD_PAUSE_DELAY=0
+  export MCD_PAUSE_DELAY=86400
 
   TMP=$(mktemp)
 
@@ -30,6 +30,9 @@ function deploy_mcd_dds {
   sudo cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
   sudo cat $DEPLOY | jq_inplace ".tokens.ETH.gem = $(echo $GEM)" $DEPLOY
   sudo cat $DEPLOY | jq_inplace ".gov = $(echo $GOV)" $DEPLOY
+
+  # change ds-pause delay to non-zero
+  sudo cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
 
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
