@@ -89,12 +89,10 @@ function deploy_scd {
     echo "Skipping dapp build for maker-otc (already built)"
   else
     echo "Building maker-otc..."
-    dapp --use solc:0.4.25 build
+    dapp --use solc:0.5.12 build --extract
   fi
   echo "Deploying maker-otc (MatchingMarket)..."
   OTC=$(dapp create MatchingMarket 1893459661) # This is some random date in 2030
-  addr1=$SAI_GEM
-  addr2=$SAI_SAI
   cd -
 
   ############################
@@ -105,7 +103,7 @@ function deploy_scd {
     echo "Skipping dapp build for proxy-registry (already built)"
   else
     echo "Building proxy-registry..."
-    dapp --use solc:0.5.0 build ProxyRegistry
+    dapp --use solc:0.5.0 build --extract
   fi
   echo "Deploying ProxyRegistry and DSProxyFactory..."
   DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
@@ -128,7 +126,7 @@ function deploy_scd {
     echo "Skipping dapp build for sai-proxy (already built)"
   else
     echo "Building sai-proxy..."
-    dapp --use solc:0.4.25 build
+    dapp --use solc:0.4.25 build  --extract
   fi
   echo "Deploying sai-proxy (SaiProxyCreateAndExecute)..."
   SAI_PROXY=$(dapp create SaiProxyCreateAndExecute)
@@ -143,9 +141,10 @@ function deploy_scd {
     echo "Skipping dapp build for oasis-direct-proxy (already built)"
   else
     echo "Building oasis-direct-proxy..."
-    dapp --use solc:0.4.25 build
+    dapp --use solc:0.4.25 build --extract
   fi
   echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
+  SAI_GEM=$(cat $OUT/addresses.json | jq --raw-output '.GEM')
   OASIS_PROXY=$(dapp create ProxyCreationAndExecute $SAI_GEM)
   echo "Deployed ProxyCreationAndExecute to $OASIS_PROXY"
   cd -
@@ -157,7 +156,7 @@ function deploy_scd {
   cd $LIB/ds-token
   dapp update
   echo "Building old MKR token..."
-  dapp --use solc:0.4.25 build
+  dapp --use solc:0.4.25 build --extract
   echo "Deploying old MKR token..."
   OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
   echo "Deployed old MKR to $OLD_MKR"
@@ -169,7 +168,7 @@ function deploy_scd {
     echo "Skipping dapp build for MKR redeemer (already built)"
   else
     echo "Building MKR redeemer..."
-    dapp --use solc:0.4.25 build
+    dapp --use solc:0.4.25 build --extract
   fi
   echo "Deploying MKR redeemer..."
   REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
