@@ -40,7 +40,8 @@ function write_json_scd {
   "OLD_CHIEF": "$OLD_CHIEF",
   "OLD_IOU": "$OLD_IOU",
   "POLLING": "$POLLING",
-  "OLD_VOTE_PROXY_FACTORY": "$OLD_VOTE_PROXY_FACTORY"
+  "OLD_VOTE_PROXY_FACTORY": "$OLD_VOTE_PROXY_FACTORY",
+  "LINE_SPELL": "$LINE_SPELL"
 }
 EOM
 }
@@ -52,6 +53,9 @@ function deploy_scd {
   sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
   sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
 
+  ############################
+  # build sai
+
   cd $LIB/sai
   if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" && ! -f out/SaiTop.abi ) ]]; then
     echo "Building and deploying sai contracts..."
@@ -60,7 +64,13 @@ function deploy_scd {
   fi
   bin/deploy-fab && . load-fab-unknown
   bin/deploy     && . load-env-unknown
+  echo "Sai contracts successfully deployed"
 
+  SAI_PIP=$(cat $OUT/addresses.json | jq --raw-output '.PIP')
+  SAI_PEP=$(cat $OUT/addresses.json | jq --raw-output '.PEP')
+  SAI_MOM=$(cat $OUT/addresses.json | jq --raw-output '.MOM')
+  SAI_GOV=$(cat $OUT/addresses.json | jq --raw-output '.GOV')
+  
   # Set the ETH price feed to 400 USD
   seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
   # Set the MKR price feed to 1040.49 USD
@@ -200,6 +210,26 @@ function deploy_scd {
   cd -
 
   ############################
+  # build line-spell
+
+  # This spell will not work for anything but reading basic variables.
+  # If you need a working spell, it will need to be added to deploy-mcd,
+  # and the following placeholder variables will need to be corrected.
+
+  PAUSE="0xe82ce3d6bf40f2f9414c8d01a35e3d9eb16a1761"
+  PLAN="0xe82ce3d6bf40f2f9414c8d01a35e3d9eb16a1761"
+  VAT="0xe82ce3d6bf40f2f9414c8d01a35e3d9eb16a1761"
+  ILK=$(seth --to-bytes32 "0x4241542d41")
+  LINE=100000000
+
+  cd $LIB/line-spell
+  dapp update
+  dapp --use solc:0.5.12 build --extract
+  LINE_SPELL=$(dapp create LineSpell $PAUSE $PLAN $VAT $ILK $LINE)
+  cd -
+
+  ############################
+  # copy contract abis and addresses
 
   mkdir -p $OUT
   write_json_scd "$OUT/addresses.json"
@@ -214,6 +244,7 @@ function deploy_scd {
   $LIB/ds-chief/out/DSChief.abi \
   $LIB/symbolic-voting/out/PollingEmitter.abi \
   $LIB/vote-proxy/out/VoteProxyFactory.abi \
+  $LIB/line-spell/out/LineSpell.abi \
   $OUT
 
   ls $LIB/sai/out/*.abi | \
