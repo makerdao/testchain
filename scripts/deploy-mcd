@@ -19,6 +19,7 @@ function deploy_mcd_dds {
   TMP=$(mktemp)
 
   # change testchain.json to not send 10000 ETH
+  # This isn't correct--where does this happen now?
   sed_inplace 's/10000 eth/1 eth/' config/testchain.json
 
   # deploy migration contracts with local tub and gem
@@ -34,7 +35,7 @@ function deploy_mcd_dds {
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
   ETH_RPC_URL="http://localhost:2000"
-  nix run -f $DDS -c dss-deploy testchain -f config/testchain.json
+  nix run -f ./ -c dss-deploy testchain
 
   # uncomment below to add more ilks
   # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
