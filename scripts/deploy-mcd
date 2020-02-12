@@ -18,20 +18,18 @@ function deploy_mcd_dds {
 
   TMP=$(mktemp)
 
-  # change testchain.json to not send 10000 ETH
-  # This isn't correct--where does this happen now?
-  sed_inplace 's/10000 eth/1 eth/' config/testchain.json
-
   # deploy migration contracts with local tub and gem
   TUB=$(cat $OUT/addresses.json | jq '.TUB')
   GEM=$(cat $OUT/addresses.json | jq '.GEM')
   GOV=$(cat $OUT/addresses.json | jq '.GOV')
+  OMNIA_AMOUNT="1"
   DEPLOY=$DDS/config/testchain.json
+  cat $DEPLOY | jq_inplace ".omniaAmount = $(echo $OMNIA_AMOUNT)" $DEPLOY
   cat $DEPLOY | jq_inplace ".migration = $(<$LIB/deploy-migration.json)" $DEPLOY
   cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
   cat $DEPLOY | jq_inplace ".tokens.ETH.gem = $(echo $GEM)" $DEPLOY
   cat $DEPLOY | jq_inplace ".gov = $(echo $GOV)" $DEPLOY
-  echo "here"
+
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
   ETH_RPC_URL="http://localhost:2000" nix run -f ./ -c dss-deploy testchain
