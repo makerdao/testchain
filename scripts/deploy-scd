@@ -66,18 +66,20 @@ function deploy_scd {
   bin/deploy     && . load-env-unknown
   echo "Sai contracts successfully deployed"
 
-  SAI_PIP=$(cat $OUT/addresses.json | jq --raw-output '.PIP')
-  SAI_PEP=$(cat $OUT/addresses.json | jq --raw-output '.PEP')
-  SAI_MOM=$(cat $OUT/addresses.json | jq --raw-output '.MOM')
-  SAI_GOV=$(cat $OUT/addresses.json | jq --raw-output '.GOV')
+  SAI_PIP_ADDR=$(cat $OUT/addresses.json | jq --raw-output '.PIP')
+  SAI_PEP_ADDR=$(cat $OUT/addresses.json | jq --raw-output '.PEP')
+  SAI_MOM_ADDR=$(cat $OUT/addresses.json | jq --raw-output '.MOM')
+  SAI_GOV_ADDR=$(cat $OUT/addresses.json | jq --raw-output '.GOV')
+
+  echo $SAI_TUB
   
   # Set the ETH price feed to 400 USD
-  seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
+  seth send $SAI_PIP_ADDR "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
   # Set the MKR price feed to 1040.49 USD
-  seth send $SAI_PEP "poke(bytes32)" 0x00000000000000000000000000000000000000000000003867bb3260a7cf7200
-  seth send $SAI_MOM "setCap(uint256)" $(seth --to-uint256 $(seth --to-wei 1000 eth))
+  seth send $SAI_PEP_ADDR "poke(bytes32)" 0x00000000000000000000000000000000000000000000003867bb3260a7cf7200
+  seth send $SAI_MOM_ADDR "setCap(uint256)" $(seth --to-uint256 $(seth --to-wei 1000 eth))
   # Mint MKR, owned by default account
-  seth send $SAI_GOV "mint(uint256)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
+  seth send $SAI_GOV_ADDR "mint(uint256)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
   cd -
 
   ############################
@@ -171,7 +173,7 @@ function deploy_scd {
     dapp --use solc:0.4.25 build --extract
   fi
   echo "Deploying MKR redeemer..."
-  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
+  REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV_ADDR $(seth --to-hex 2000000000))
   echo "Deployed MKR redeemer to $REDEEMER"
   cd -
 
@@ -186,7 +188,7 @@ function deploy_scd {
   export SETH_ASYNC=no
   test -z $OLD_IOU && OLD_IOU=$(seth receipt $IOUtx contractAddress)
   MAX_YAYS=5
-  OLD_CHIEF=$(dapp create DSChief $SAI_GOV $OLD_IOU $MAX_YAYS)
+  OLD_CHIEF=$(dapp create DSChief $SAI_GOV_ADDR $OLD_IOU $MAX_YAYS)
   seth send $OLD_IOU 'setOwner(address)' $OLD_CHIEF
   echo "Deployed old DSChief to $OLD_CHIEF and old IOU to $OLD_IOU"
 
