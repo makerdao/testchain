@@ -64,12 +64,6 @@ function deploy_scd {
   fi
   bin/deploy-fab && . load-fab-unknown
   bin/deploy     && . load-env-unknown
-  echo "Sai contracts successfully deployed"
-
-  SAI_PIP=$(cat $OUT/addresses.json | jq --raw-output '.PIP')
-  SAI_PEP=$(cat $OUT/addresses.json | jq --raw-output '.PEP')
-  SAI_MOM=$(cat $OUT/addresses.json | jq --raw-output '.MOM')
-  SAI_GOV=$(cat $OUT/addresses.json | jq --raw-output '.GOV')
   
   # Set the ETH price feed to 400 USD
   seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
