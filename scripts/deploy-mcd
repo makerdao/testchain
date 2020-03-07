@@ -31,7 +31,7 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".gov = $(echo $GOV)" $DEPLOY
 
   # change ds-pause delay to non-zero
-  sudo cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
+  cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
 
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
