@@ -37,8 +37,6 @@ function deploy_mcd_dds {
   # installs all necessary dependencies
   ETH_RPC_URL="http://localhost:2000" nix run -f ./ -c dss-deploy testchain
 
-  echo "Past the deployment"
-
   # uncomment below to add more ilks
   # DPA=$LIB/testchain-dss-deployment-scripts/contracts/dss-proxy-actions
   # cd $DPA/lib/dss-cdp-manager/lib/dss-deploy/
@@ -53,7 +51,6 @@ function deploy_mcd_dds {
     xargs sh -c "sudo cp \$@ $OUT/mcd" placeholder
   # why the placeholder? see https://en.wikipedia.org/wiki/Xargs#Shell_trick
 
-  echo "Just before addresses"
   # sort addresses alphabetically
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
 
