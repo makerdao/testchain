@@ -34,3 +34,6 @@
 [submodule "lib/vote-proxy"]
 	path = lib/vote-proxy
 	url = https://github.com/makerdao/vote-proxy.git
+[submodule "lib/line-spell"]
+	path = lib/line-spell
+	url = https://github.com/makerdao/line-spell.git
