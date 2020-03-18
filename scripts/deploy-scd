@@ -41,7 +41,8 @@ function write_json_scd {
   "OLD_IOU": "$OLD_IOU",
   "POLLING": "$POLLING",
   "OLD_VOTE_PROXY_FACTORY": "$OLD_VOTE_PROXY_FACTORY",
-  "LINE_SPELL": "$LINE_SPELL"
+  "LINE_SPELL": "$LINE_SPELL",
+  "USDC": "$USDC"
 }
 EOM
 }
@@ -219,6 +220,20 @@ function deploy_scd {
   dapp update
   dapp --use solc:0.5.12 build --extract
   LINE_SPELL=$(dapp create LineSpell $PAUSE $PLAN $VAT $ILK $LINE)
+  cd -
+
+  ############################
+  # build stand-in USDC
+
+  # deploy a DSToken stand-in for old MKR
+  cd $LIB/ds-token
+  dapp update
+  echo "Building USDC token..."
+  dapp --use solc:0.4.25 build --extract
+  echo "Deploying USDC token..."
+  USDC=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'USDC')))
+  echo "Deployed USDC to $USDC"
+  seth send $USDC "mint(address,uint256)" $ETH_FROM 0x000000000000000000000000000000000000000000000015af1d78b58c400000
   cd -
 
   ############################
