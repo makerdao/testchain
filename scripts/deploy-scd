@@ -228,7 +228,7 @@ function deploy_scd {
   cd $LIB/sai-cagefree
   dapp update
   dapp --use solc:0.5.15 build --extract
-  CAGEFREE=$(dapp create CageFree $SAI_TAP $SAI_SAI $SAI_GEM)
+  CAGEFREE=$(dapp create CageFree $SAI_TAP $SAI_GEM)
   cd -
 
   ############################
