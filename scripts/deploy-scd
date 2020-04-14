@@ -41,7 +41,8 @@ function write_json_scd {
   "OLD_IOU": "$OLD_IOU",
   "POLLING": "$POLLING",
   "OLD_VOTE_PROXY_FACTORY": "$OLD_VOTE_PROXY_FACTORY",
-  "LINE_SPELL": "$LINE_SPELL"
+  "LINE_SPELL": "$LINE_SPELL",
+  "SAI_CAGEFREE": "$CAGEFREE"
 }
 EOM
 }
@@ -219,6 +220,15 @@ function deploy_scd {
   dapp update
   dapp --use solc:0.5.12 build --extract
   LINE_SPELL=$(dapp create LineSpell $PAUSE $PLAN $VAT $ILK $LINE)
+  cd -
+
+  ############################
+  # build sai cagefree
+
+  cd $LIB/sai-cagefree
+  dapp update
+  dapp --use solc:0.5.15 build --extract
+  CAGEFREE=$(dapp create CageFree $SAI_TAP $SAI_SAI $SAI_GEM)
   cd -
 
   ############################
