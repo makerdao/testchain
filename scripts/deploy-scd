@@ -248,6 +248,7 @@ function deploy_scd {
   $LIB/symbolic-voting/out/PollingEmitter.abi \
   $LIB/vote-proxy/out/VoteProxyFactory.abi \
   $LIB/line-spell/out/LineSpell.abi \
+  $LIB/sai-cagefree/out/CageFree.abi \
   $OUT
 
   ls $LIB/sai/out/*.abi | \
