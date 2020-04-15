@@ -65,6 +65,8 @@ function deploy_scd {
   fi
   bin/deploy-fab && . load-fab-unknown
   bin/deploy     && . load-env-unknown
+
+  # TODO: delete 0x prefix from saved addresses in deploy
   
   # Set the ETH price feed to 400 USD
   seth send $SAI_PIP "poke(bytes32)" 0x000000000000000000000000000000000000000000000015af1d78b58c400000
