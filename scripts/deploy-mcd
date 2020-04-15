@@ -51,6 +51,8 @@ function deploy_mcd_dds {
     xargs sh -c "sudo cp \$@ $OUT/mcd" placeholder
   # why the placeholder? see https://en.wikipedia.org/wiki/Xargs#Shell_trick
 
+  # TODO: this line no longer runs, but can be run manually
+  # jq -S . lib/dss-deploy-scripts/out/addresses.json > out/addresses-mcd.json
   # sort addresses alphabetically
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
 
