@@ -28,7 +28,7 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".migration = $(<$LIB/deploy-migration.json)" $DEPLOY
   cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
   cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".gov = $(echo $GOV)" $DEPLOY
+  cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
   # change ds-pause delay to non-zero
   cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
