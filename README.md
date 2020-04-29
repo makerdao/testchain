@@ -26,6 +26,15 @@ If `var/chaindata` does not exist, and the `--reset-chaindata` argument is not p
 
 Once the deployment is complete, you will find the list of contract addresses in the `out/addresses.json` file.
 
+## Deployer account
+
+Some governance processes are bypassed in the testchain deployment, which gives the account that deployed everything some special priveleges within the system (such as triggering a shutdown). It also starts with a balance of 400 MKR.
+
+```
+Address: 0x16Fb96a5fa0427Af0C8F7cF1eB4870231c8154B6
+Key: 474BEB999FED1B3AF2EA048F963833C686A0FBA05F5724CB6417CF3B8EE9697E
+```
+
 ## Creating a new snapshot
 
 If you want to add new contracts to the deployment scripts and create a new snapshot from the resulting deployment, you can run the following series of commands:
