@@ -14,7 +14,10 @@
             source /home/circleci/setup-env.sh
             yarn deploy-mcd
             yarn create-default-snapshot
+            git config user.email "ebennett19@gmail.com"
+            git config user.name "Ethan Bennett"
+            git add .
+            git commit -m "Create new snapshot"
 
-# Should get around sudo requirement in abi copying
-# Should commit changes to branch before merge
+# Add git push
 # Should only run on PR
