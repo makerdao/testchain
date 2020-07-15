@@ -1,14 +1,18 @@
- version: 2
- jobs:
-   build:
-     docker:
-       - image: levity/dapptools-node-latest
-     steps:
-       - checkout
-       - run:
+version: 2
+jobs:
+  build:
+    docker:
+      - image: levity/dapptools-node-latest
+    steps:
+      - checkout
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule update  --init --recursive
+      - run:
           name: Install dependencies
           command: yarn
-       - run:
+      - run:
           name: Build new snapshot
           command: |
             source /home/circleci/setup-env.sh
