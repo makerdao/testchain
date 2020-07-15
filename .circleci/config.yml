@@ -19,5 +19,16 @@
             git add .
             git commit -m "Create new snapshot"
 
+# builder for '/nix/store/3f2l5am0vr4jhqskzp1hy6gqpx13q0gc-dss-deploy-scripts-solidity-packages.drv' failed with exit code 1; last 4 log lines:
+#   /nix/store/3g2pkmc1s9ycjaxaqc5hrzmq05r5ywbi-stdenv-linux/setup: line 813: /build/env-vars: No such file or directory
+#   unpacking sources
+#   /nix/store/3g2pkmc1s9ycjaxaqc5hrzmq05r5ywbi-stdenv-linux/setup: line 813: /build/env-vars: No such file or directory
+#   variable $src or $srcs should point to the source
+# cannot build derivation '/nix/store/fbax96ycfz0dmmfbmb13s3sxpxzg1ld6-dss-deploy-scripts.drv': 1 dependencies couldn't be built
+# [38 built (1 failed), 168 copied (1170.3 MiB), 224.9 MiB DL]
+# error: build of '/nix/store/fbax96ycfz0dmmfbmb13s3sxpxzg1ld6-dss-deploy-scripts.drv' failed
+# error Command failed with exit code 100.
+
 # Add git push
+# See about removing personal details from file
 # Should only run on PR
