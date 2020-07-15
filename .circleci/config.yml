@@ -14,3 +14,7 @@
             source /home/circleci/setup-env.sh
             yarn deploy-mcd
             yarn create-default-snapshot
+
+# Should get around sudo requirement in abi copying
+# Should commit changes to branch before merge
+# Should only run on PR

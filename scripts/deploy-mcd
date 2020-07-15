@@ -39,8 +39,7 @@ function deploy_mcd_dds {
 
   # Copy addresses and abis
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
-  chown -R $USER $OUT/mcd
-  cp $DDS/out/abi/*.abi $OUT/mcd
+  sudo cp $DDS/out/abi/*.abi $OUT/mcd
 
   # all done, go home!
   cd -

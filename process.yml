@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: levity/dapptools-node-latest
+    steps:
+    - checkout
+    - run:
+        name: Install dependencies
+        command: yarn
+    - run:
+        name: Build new snapshot
+        command: |
+          source /home/circleci/setup-env.sh
+          yarn deploy-mcd
+          yarn create-default-snapshot
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
