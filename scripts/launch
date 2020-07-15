@@ -133,6 +133,7 @@ if [ "$ci" ]; then
   # Proceed to the command given
   ${otherargs[@]}
 else
+  echo "here"
   # The testnet will continue to run with its deployed contracts
   # until the user confirms it should shut down.
   echo "Press Ctrl-C to stop the testchain."

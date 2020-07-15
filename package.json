@@ -10,5 +10,9 @@
   ],
   "dependencies": {
     "ganache-cli": "makerdao/ganache-cli#fix/gas-est-crash"
+  },
+  "scripts": {
+    "deploy-mcd": "./scripts/launch -s scd-only -d --deploy-mcd-only -u",
+    "create-default-snapshot": "./scripts/create-snapshot default --force"
   }
 }
