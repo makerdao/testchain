@@ -50,6 +50,7 @@ EOM
 function deploy_scd {
   # Fix sai deploy script
   sed_inplace '13s/DSToken.*/WETH9)/' $LIB/sai/bin/deploy
+  sed_inplace 's/=0x/=/g' $LIB/sai/bin/deploy 
   # Change sai deploy scripts (deploy and deploy-fab) to skip dapp build if SKIP_BUILD_IF_ALREADY_BUILT is set and dapp is already built
   sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
   sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
