@@ -1,4 +1,11 @@
+# WIP
+
 version: 2
+filters:
+  branches:
+    only:
+      - update-dss-deploy-scripts
+      - circleci-config
 jobs:
   build:
     docker:
@@ -21,6 +28,7 @@ jobs:
             git add .
             git commit -m "Create new snapshot"
 
-# Add git push
-# See about removing personal details from file
-# Should only run on PR
+# git/yarn authentication:
+  # should move out of this file
+  # should allow for pushing to this branch
+  # should allow for publishing
