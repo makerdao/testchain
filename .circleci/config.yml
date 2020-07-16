@@ -21,7 +21,7 @@ jobs:
           name: Build new snapshot
           command: |
             source /home/circleci/setup-env.sh
-            yarn deploy-mcd
+            yarn deploy-mcd:ci
             yarn create-default-snapshot
             git config user.email "ebennett19@gmail.com"
             git config user.name "Ethan Bennett"
