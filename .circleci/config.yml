@@ -1,13 +1,16 @@
-# WIP
-
 version: 2
+workflows:
+  version: 2
+  create-snapshot:
+    jobs:
+      - deploy-and-snapshot:
+          filters:
+            branches:
+              only:
+                - update-dss-deploy-scripts
+                - circleci-config
 jobs:
-  build:
-    filters:
-      branches:
-        only:
-          - update-dss-deploy-scripts
-          - circleci-config
+  deploy-and-snapshot:
     docker:
       - image: levity/dapptools-node-latest
     steps:
