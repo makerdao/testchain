@@ -1,13 +1,13 @@
 # WIP
 
 version: 2
-filters:
-  branches:
-    only:
-      - update-dss-deploy-scripts
-      - circleci-config
 jobs:
   build:
+    filters:
+      branches:
+        only:
+          - update-dss-deploy-scripts
+          - circleci-config
     docker:
       - image: levity/dapptools-node-latest
     steps:
