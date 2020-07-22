@@ -26,12 +26,4 @@ jobs:
             source /home/circleci/setup-env.sh
             yarn deploy-mcd:ci
             yarn create-default-snapshot
-            git config user.email "ebennett19@gmail.com"
-            git config user.name "Ethan Bennett"
-            git add .
-            git commit -m "Create new snapshot"
-
-# git/yarn authentication:
-  # should move out of this file
-  # should allow for pushing to this branch
-  # should allow for publishing
+            yarn commit-and-push

@@ -15,6 +15,7 @@
     "deploy-mcd": "./scripts/launch -s scd-only -d --deploy-mcd-only -u",
     "deploy-mcd:ci": "./scripts/launch -s scd-only -d --deploy-mcd-only --ci",
     "create-default-snapshot": "./scripts/create-snapshot default --force",
-    "install-nix": "curl -L https://nixos.org/nix/install | sh"
+    "install-nix": "curl -L https://nixos.org/nix/install | sh",
+    "commit-and-push": "./scripts/commit-and-push.sh"
   }
 }
