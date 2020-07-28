@@ -1,63 +1,47 @@
 # MakerDAO Testchain
 
-This tool will help you set up a local testchain and deploy the contracts you need to work with Maker apps.
+This tool will help you set up a local testchain with all the contracts needed for the [Dai.js](https://github.com/makerdao/dai.js) library. These are preserved as snapshots of the complete system, and can be launched quickly on Ganache without any additional deployment or configuration.
 
-This branch, `dai.js`, is configured with the contracts needed for the [Dai.js](https://github.com/makerdao/dai.js) library.
+These scripts can also be used to update, re-deploy, add, or remove contracts from the local testing environment, and to create new snapshots of that environment for future use.
 
 ## Installation and requirements
 
-Requires [Seth](https://dapp.tools/seth/), [Nix](https://github.com/NixOS/nix), Node.js and Bash.
+Requires Node.js.
 
-Run `npm install` or `yarn install` to install Ganache.
+Run `npm install` or `yarn` to install Ganache. If you only want to run the testchain with an existing snapshot (without building or deploying additional contracts), that's all you need to do.
+
+If you want to build and deploy contracts, you will need to install [Seth](https://dapp.tools/seth/) and [Nix](https://github.com/NixOS/nix) (`yarn install-nix`). You will also need to initialize and update the git submodules by running `git submodule update --init --recursive` (or `dapp update`).
 
 ## Typical usage
+
+If all you need to do is run the testchain with the `default` snapshot, simply run:
 
 ```
 scripts/launch -s default --fast
 ```
+or
+```
+yarn launch
+```
 
-## Usage
+For a full list of contracts included in the `default` snapshot, you can reference the [SCD](https://github.com/makerdao/testchain/blob/dai.js/out/addresses.json) and [MCD](https://github.com/makerdao/testchain/blob/dai.js/out/addresses-mcd.json) address files generated from the deployment scripts.
 
-Run `scripts/launch`.
+## Building and deploying contracts (the easy way)
 
-If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the chain data it finds in `var/chaindata`, and run until killed with Ctrl-C.
+The majority of users can simply run the following built-in deployment commands:
+
+- `yarn deploy-mcd` or `yarn update-mcd`: Builds and deploys all MCD contracts. `update-mcd` will also automatically overwrite the `default` snapshot with the new deployment. These can be run without altering SCD or auxiliary contracts.
+- `yarn deploy-scd` or `yarn update-scd`: Builds and deploys all SCD and auxiliary contracts. `update-scd` will also automatically overwrite the `scd-only` snapshot with the new deployment. **If you create a new SCD snapshot, you must subsequently redeploy MCD.**
+
+Note that, by default, these built-in commands assume you have up-to-date submodules, and they will terminate the testchain instance upon completion.
+
+### Building and deploying contracts (the less easy way)
+
+`scripts/launch` is the base command.
+
+If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the chain data it finds in `var/chaindata`. It will run until killed with Ctrl-C.
 
 If `var/chaindata` does not exist, and the `--reset-chaindata` argument is not present, the `default` snapshot will be used to create it.
-
-Once the deployment is complete, you will find the list of contract addresses in the `out/addresses.json` file.
-
-## Deployer account
-
-Some governance processes are bypassed in the testchain deployment, which gives the account that deployed everything some special priveleges within the system (such as triggering a shutdown). It also starts with a balance of 400 MKR.
-
-```
-Address: 0x16Fb96a5fa0427Af0C8F7cF1eB4870231c8154B6
-Key: 474BEB999FED1B3AF2EA048F963833C686A0FBA05F5724CB6417CF3B8EE9697E
-```
-
-## Creating a new snapshot
-
-If you want to add new contracts to the deployment scripts and create a new snapshot from the resulting deployment, you can run the following series of commands:
-
-```
-scripts/launch --reset-chaindata -d --deploy-scd-only -u
-scripts/create-snapshot scd-only --force
-scripts/launch -s scd-only -d --deploy-mcd-only -u
-scripts/create-snapshot default --force
-```
-
-The above series creates a separate snapshot with only the scd deployment simply to make updating mcd-specific code easier and faster. If this isn't relevant to your use case, you can omit those steps and run:
-
-```
-scripts/launch --reset-chaindata -d -u
-scripts/create-snapshot your-snapshot-name
-```
-
-Snapshot names are arbitrary, so in the above case, you could create another snapshot if necessary. The `--force` flag in the first example is only required if you're overwriting an existing snapshot.
-
-Also note that `-u` skips the submodule update, and can be omitted if you need to update before running the scripts.
-
-If you run the scd and mcd scripts separately, be careful to only include `--reset-chaindata` in the former. The mcd scripts depend on some of the chaindata from the scd scripts, and will fail without it. If you're running them both at the same time, like in the second example above, you can include it without causing any failures.
 
 ### Options
 
@@ -77,18 +61,24 @@ If you run the scd and mcd scripts separately, be careful to only include `--res
 
 * `--ci`: If this is set, all unrecognized arguments will be treated as a new command. This command will be run, and Ganache will exit afterward.
 
-## Deploying changes to contract code
 
-When the deploy script is run, it copies ABI files and output addresses of deployment contracts to a file in `out/` directory. These can be copied into the source code of applications working with the test chain as you see fit.
+## Deployer account
 
-## Creating new snapshots
-
-Use `scripts/create-snapshot NAME` to copy the contents of `var/chaindata` into a new folder `snapshots/NAME`. Add `--force` if you want to replace an existing snapshot.
-
-## Recipe: rebuilding MCD
+Some governance processes are bypassed in the testchain deployment. This gives the deployer account special priveleges within the system (such as triggering a shutdown). This account also starts with a balance of 400 MKR.
 
 ```
-./scripts/launch -s scd-only --deploy --deploy-mcd-only
+Address: 0x16Fb96a5fa0427Af0C8F7cF1eB4870231c8154B6
+Key: 474BEB999FED1B3AF2EA048F963833C686A0FBA05F5724CB6417CF3B8EE9697E
 ```
 
-This starts with a snapshot of all the SCD contracts, and then redeploys all the MCD contracts on top of that snapshot. Edit `scripts/deploy-mcd` to tweak the build parameters or add to it.
+## Creating a new snapshot
+
+Create a new snapshot with: `./scripts/create-snapshot $SNAPSHOT_NAME`
+
+Update an existing snapshot with: `./scripts/create-snapshot $SNAPSHOT_NAME --force`
+
+If you want to update the `default` or `scd-only` snapshots, you can also run `yarn create-default-snapshot` or `yarn create-scd-snapshot`
+
+## Contract data and build output
+
+When the deployment scripts are run, they copy ABI files and output addresses from the deployed contracts to a file in the `out/` directory. These can be copied into the source code of applications working with the testchain as you see fit.
