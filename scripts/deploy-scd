@@ -195,7 +195,11 @@ function deploy_scd {
   cd  $LIB/symbolic-voting
   dapp update
   dapp --use solc:0.5.0 build --extract
+
+  # The polling contract is deployed twice to represent
+  # the legacy polling contract
   POLLING=$(dapp create PollingEmitter)
+  BATCH_POLLING=$(dapp create PollingEmitter)
   cd -
 
   ############################
