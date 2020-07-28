@@ -26,7 +26,9 @@ yarn launch
 
 For a full list of contracts included in the `default` snapshot, you can reference the [SCD](https://github.com/makerdao/testchain/blob/dai.js/out/addresses.json) and [MCD](https://github.com/makerdao/testchain/blob/dai.js/out/addresses-mcd.json) address files generated from the deployment scripts.
 
-## Building and deploying contracts (the easy way)
+## Building and deploying contracts
+
+### The easy way
 
 The majority of users can simply run the following built-in deployment commands:
 
@@ -35,7 +37,7 @@ The majority of users can simply run the following built-in deployment commands:
 
 Note that, by default, these built-in commands assume you have up-to-date submodules, and they will terminate the testchain instance upon completion.
 
-### Building and deploying contracts (the less easy way)
+### The less easy way
 
 `scripts/launch` is the base command.
 
