@@ -4,6 +4,8 @@ updates:
   directory: "/"
   schedule:
     interval: daily
+  allow:
+    - dependency-name: "*dss-deploy-scripts*"
   open-pull-requests-limit: 10
   reviewers:
     - "ethanbennett"
