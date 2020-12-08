@@ -18,7 +18,7 @@ function deploy_mcd_dds {
 
   TMP=$(mktemp)
 
-  # deploy migration contracts with local tub and gem
+  # deploy contracts with local tub, gem, and gov
   TUB=$(cat $OUT/addresses.json | jq '.TUB')
   GEM=$(cat $OUT/addresses.json | jq '.GEM')
   GOV=$(cat $OUT/addresses.json | jq '.GOV')
