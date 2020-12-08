@@ -30,9 +30,6 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
   cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
-  # increase the amount of mana minted on deployment
-  sed_inplace 's/1000000/100000000000/g' $LIB/dss-deploy-scripts/libexec/dss/deploy-ilk-mana
-
   # change ds-pause delay to non-zero
   cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
 
