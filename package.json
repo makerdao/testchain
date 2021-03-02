@@ -1,6 +1,6 @@
 {
   "name": "@makerdao/testchain",
-  "version": "1.1.30",
+  "version": "1.1.31",
   "license": "MIT",
   "files": [
     "out",
