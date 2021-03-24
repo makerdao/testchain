@@ -30,6 +30,11 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
   cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
+  # Add clippers for relevant collateral types
+  CLIP_CONFIG=$(cat $DEPLOY | jq '.tokens.ETH.ilks.B.clipDeploy')
+  cat $DEPLOY | jq_inplace ".tokens.LINK.ilks.A.clipDeploy = $(echo $CLIP_CONFIG)" $DEPLOY
+  cat $DEPLOY | jq_inplace ".tokens.YFI.ilks.A.clipDeploy = $(echo $CLIP_CONFIG)" $DEPLOY
+
   # change ds-pause delay to non-zero
   cat $DEPLOY | jq_inplace ".pauseDelay = $(echo $MCD_PAUSE_DELAY)" $DEPLOY
 
