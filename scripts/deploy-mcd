@@ -31,10 +31,11 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
   # Add clippers for relevant collateral types
+  # Be sure to delete corresponding flipDeploys, or clippers will be ignored
   CLIP_CONFIG=$(cat $DEPLOY | jq '.tokens.ETH.ilks.B.clipDeploy')
-  jq "del(.tokens.LINK.ilks.A.flipDeploy)" $DEPLOY
+  cat $DEPLOY | jq_inplace "del(.tokens.LINK.ilks.A.flipDeploy)" $DEPLOY
   cat $DEPLOY | jq_inplace ".tokens.LINK.ilks.A.clipDeploy = $(echo $CLIP_CONFIG)" $DEPLOY
-  jq "del(.tokens.YFI.ilks.A.flipDeploy)" $DEPLOY
+  cat $DEPLOY | jq_inplace "del(.tokens.YFI.ilks.A.flipDeploy)" $DEPLOY
   cat $DEPLOY | jq_inplace ".tokens.YFI.ilks.A.clipDeploy = $(echo $CLIP_CONFIG)" $DEPLOY
 
   # change ds-pause delay to non-zero
