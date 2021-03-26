@@ -6,7 +6,6 @@ git add .
 git commit -m "Create new snapshot"
 git push origin $BRANCH
 
-
 # git/yarn authentication:
   # should move out of this file
   # should allow for pushing to this branch

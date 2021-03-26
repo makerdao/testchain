@@ -3,23 +3,21 @@ workflows:
   version: 2
   create-snapshot:
     jobs:
-      - deploy-and-snapshot:
+      - deploy-and-create-snapshot:
           filters:
             branches:
               only:
                 - update-dss-deploy-scripts
                 - circleci-config
 jobs:
-  deploy-and-snapshot:
+  deploy-and-create-snapshot:
     docker:
       - image: levity/dapptools-node-latest
     steps:
       - checkout
       - run:
           name: Install dependencies
-          command: |
-            yarn
-            yarn install-nix
+          command: yarn
       - run:
           name: Build new snapshot
           command: |
