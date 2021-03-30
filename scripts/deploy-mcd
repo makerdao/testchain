@@ -32,7 +32,7 @@ function deploy_mcd_dds {
 
   # Add clippers for relevant collateral types
   # Be sure to delete corresponding flipDeploys, or clippers will be ignored
-  CLIP_CONFIG=$(cat $DEPLOY | jq '.tokens.ETH.ilks.B.clipDeploy')
+  CLIP_CONFIG=$(cat $DEPLOY | jq '.tokens.ETH.ilks.C.clipDeploy')
   cat $DEPLOY | jq_inplace "del(.tokens.LINK.ilks.A.flipDeploy)" $DEPLOY
   cat $DEPLOY | jq_inplace ".tokens.LINK.ilks.A.clipDeploy = $(echo $CLIP_CONFIG)" $DEPLOY
   cat $DEPLOY | jq_inplace "del(.tokens.YFI.ilks.A.flipDeploy)" $DEPLOY
