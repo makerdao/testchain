@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+function write_json_a {
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_json path/to/file.json"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
+{
+  "VOTE_DELEGATE_FACTORY": "$VDF"
+}
+EOM
+}
+
 function jq_inplace {
   TMP=$(mktemp)
   jq "$1" > $TMP && mv $TMP "$2"
@@ -40,6 +54,22 @@ function deploy_mcd_dds {
   # Copy addresses and abis
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
   sudo cp $DDS/out/abi/*.abi $OUT/mcd
+
+  ############################
+  # build vote delegate
+
+  cd  $LIB/vote-delegate
+  dapp update
+  #doesn't seem to work automatically like it does everywhere else
+  nix-env -f https://github.com/dapphub/dapptools/archive/master.tar.gz -iA solc-static-versions.solc_0_6_12
+  dapp --use solc:0.6.12 build || true
+
+  CHIEF=$(cat $OUT/addresses-mcd.json | jq --raw-output '.MCD_ADM')
+  POL=$(cat $OUT/addresses.json | jq --raw-output '.BATCH_POLLING')
+  VDF=$(dapp create VoteDelegateFactory $CHIEF $POL)
+  echo "VDF Address:"
+  echo $VDF
+  write_json_a "$OUT/addresses-mcd.json"
 
   # all done, go home!
   cd -

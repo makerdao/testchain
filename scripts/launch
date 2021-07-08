@@ -60,7 +60,8 @@ if ! nc -z 127.0.0.1 $PORT; then
   fi
 
   # Configure seth
-  export ETH_GAS=${ETH_GAS:-"7000000"} # Ganache's default block gas limit
+  # export ETH_GAS=${ETH_GAS:-"14985353"} # Ganache's default block gas limit
+  export ETH_GAS=${ETH_GAS:-"15000000"} # Ganache's default block gas limit
   export SETH_STATUS=yes
   export ETH_RPC_ACCOUNTS=yes # Don't use ethsign
   export ETH_RPC_URL=http://127.1:$PORT
@@ -73,7 +74,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     yarn install
     cd -
   fi
-
+  #-i 999 -p 2000 -a 1000 -m "hill law jazz limb penalty escape public dish stand bracket blue jar" --db var/chaindata --allowUnlimitedContractSize
   echo "Starting Ganache..."
   ganache_args=(
     $GANACHE_CLI
@@ -83,6 +84,7 @@ if ! nc -z 127.0.0.1 $PORT; then
     -l $ETH_GAS
     -m "hill law jazz limb penalty escape public dish stand bracket blue jar"
     --db $VAR/chaindata
+    --allowUnlimitedContractSize
   )
 
   if [ ! $throw_revert ]; then

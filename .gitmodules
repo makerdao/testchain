@@ -40,3 +40,6 @@
 [submodule "lib/sai-cagefree"]
 	path = lib/sai-cagefree
 	url = https://github.com/makerdao/sai-cagefree.git
+[submodule "lib/vote-delegate"]
+	path = lib/vote-delegate
+	url = https://github.com/makerdao/vote-delegate.git
