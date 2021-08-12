@@ -49,6 +49,20 @@ function deploy_mcd_dds {
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
   sudo cp $DDS/out/abi/*.abi $OUT/mcd
 
+  ############################
+  # build vote delegate
+
+  cd  $LIB/vote-delegate
+  dapp update
+  #doesn't seem to work automatically like it does everywhere else
+  nix-env -f https://github.com/dapphub/dapptools/archive/master.tar.gz -iA solc-static-versions.solc_0_6_12
+  dapp --use solc:0.6.12 build || true
+
+  CHIEF=$(cat $OUT/addresses-mcd.json | jq --raw-output '.MCD_ADM')
+  POL=$(cat $OUT/addresses.json | jq --raw-output '.BATCH_POLLING')
+  VDF=$(dapp create VoteDelegateFactory $CHIEF $POL)
+  echo "VDF Address:" $VDF
+
   # all done, go home!
   cd -
 }
