@@ -47,14 +47,16 @@ function deploy_mcd_dds {
 
   # Copy addresses and abis
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
-  sudo cp $DDS/out/abi/*.abi $OUT/mcd
+  # Not sure if dss-deploy-scripts changed something, but this way doesn't work anymore:
+  #sudo cp $DDS/out/abi/*.abi $OUT/mcd
+  sudo cp $DDS/out/abi/**/*.abi $OUT/mcd
 
   ############################
   # build vote delegate
 
   cd  $LIB/vote-delegate
   dapp update
-  #doesn't seem to work automatically like it does everywhere else
+  # "dapp --use" doesn't seem to automatically install the solc version like it does everywhere else, so do it manually
   nix-env -f https://github.com/dapphub/dapptools/archive/master.tar.gz -iA solc-static-versions.solc_0_6_12
   dapp --use solc:0.6.12 build || true
 

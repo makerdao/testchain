@@ -57,6 +57,7 @@ function deploy_scd {
   #sed_inplace 's/build/build --extract/g' $LIB/sai/bin/deploy-fab 
 
   # Change sai deploy scripts to skip dapp build if SKIP_BUILD_IF_ALREADY_BUILT is set and dapp is already built
+  # FIXME: I don't think these do anything, because the target `dapp build` doesn't exist in the files
   sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
   sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
 
@@ -224,13 +225,13 @@ function deploy_scd {
 
   # deploy a DSToken stand-in for old MKR
   cd $LIB/ds-token
-  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
-    echo "Skipping dapp build for old MKR token (already built)"
-  else
+  # if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
+  #   echo "Skipping dapp build for old MKR token (already built)"
+  # else
     dapp update
     echo "Building old MKR token..."
-    dapp --use solc:0.4.25 build
-  fi
+    dapp --use solc:0.4.25 build || true
+  # fi
   
   echo "Deploying old MKR token..."
   OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
