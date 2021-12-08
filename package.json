@@ -18,7 +18,7 @@
     "create-default-snapshot": "./scripts/create-snapshot default --force",
     "create-scd-snapshot": "./scripts/create-snapshot scd-only --force",
     "update-mcd": "yarn deploy-mcd && yarn create-default-snapshot",
-    "update-scd": "yarn deploy-scd && yarn create-scd-snapshot",
+    "update-scd": "yarn deploy-scd --fast && yarn create-scd-snapshot",
     "update-all": "yarn update-scd && yarn update-mcd",
     "install-nix": "curl -L https://nixos.org/nix/install | sh",
     "commit-and-push": "./scripts/commit-and-push.sh"
