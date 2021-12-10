@@ -125,7 +125,7 @@ function deploy_scd {
   # dapp update
   echo "building SAI"
   dapp update
-  dapp --use solc:0.4.25 build --optimize || tru
+  dapp --use solc:0.4.25 build --optimize || true
 
   ############################
   # build sai

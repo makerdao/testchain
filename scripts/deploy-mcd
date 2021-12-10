@@ -27,7 +27,7 @@ function deploy_mcd_dds {
   cat $DEPLOY | jq_inplace ".omniaAmount = $(echo $OMNIA_AMOUNT)" $DEPLOY
   cat $DEPLOY | jq_inplace ".migration = $(<$LIB/deploy-migration.json)" $DEPLOY
   cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
+  #cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
   cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
   # change ds-pause delay to non-zero
@@ -36,7 +36,7 @@ function deploy_mcd_dds {
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
   # "nix run" is now "nix shell" nix-command https://github.com/NixOS/nix/issues/5081#issuecomment-890901413
-  ETH_RPC_URL="http://localhost:2000" nix shell -f ./ -c dss-deploy testchain
+  ETH_RPC_URL="http://localhost:2000" nix run -f ./ -c dss-deploy testchain
 
   # Copy addresses and abis
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
