@@ -13,7 +13,7 @@
   },
   "scripts": {
     "launch": "./scripts/launch -s default --fast",
-    "deploy-mcd": "./scripts/launch -s scd-only -d --deploy-mcd-only -u --ci",
+    "deploy-mcd": "./scripts/launch -s scd-only --reset-chaindata -d --deploy-mcd-only -u --ci",
     "deploy-scd": "./scripts/launch --reset-chaindata -d --deploy-scd-only -u --ci",
     "create-default-snapshot": "./scripts/create-snapshot default --force",
     "create-scd-snapshot": "./scripts/create-snapshot scd-only --force",
