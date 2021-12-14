@@ -11,6 +11,13 @@ function sed_inplace {
 }
 
 function deploy_mcd_dds {
+  #increase nonce to avoid contract address collision with scd snapshot
+  for i in {1..50}
+  do
+    seth send --value 0.0005 0xAceBabe64807cb045505b268ef253D8fC2FeF5Bc #random address
+    echo "sent 0.0005 eth"
+  done
+
   DDS=$LIB/dss-deploy-scripts
   cd $DDS
 
@@ -18,17 +25,9 @@ function deploy_mcd_dds {
 
   TMP=$(mktemp)
 
-  # deploy contracts with local tub, gem, and gov
-  TUB=$(cat $OUT/addresses.json | jq '.TUB')
-  GEM=$(cat $OUT/addresses.json | jq '.GEM')
-  GOV=$(cat $OUT/addresses.json | jq '.GOV')
   OMNIA_AMOUNT="1"
   DEPLOY=$DDS/config/testchain.json
   cat $DEPLOY | jq_inplace ".omniaAmount = $(echo $OMNIA_AMOUNT)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".migration = $(<$LIB/deploy-migration.json)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".migration.tub = $(echo $TUB)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".tokens.ETH.import.gem = $(echo $GEM)" $DEPLOY
-  cat $DEPLOY | jq_inplace ".import.gov = $(echo $GOV)" $DEPLOY
 
   # Add clippers for relevant collateral types
   # Be sure to delete corresponding flipDeploys, or clippers will be ignored
