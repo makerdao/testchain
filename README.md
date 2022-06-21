@@ -1,3 +1,7 @@
+# Attention
+
+## this repo is no longer maintained with active development! 
+
 # MakerDAO Testchain
 
 This tool will help you set up a local testchain with all the contracts needed for the [Dai.js](https://github.com/makerdao/dai.js) library. These are preserved as snapshots of the complete system, and can be launched quickly on Ganache without any additional deployment or configuration.
