@@ -49,6 +49,14 @@ If run with no arguments, it will start Ganache at `127.0.0.1:2000` with the cha
 
 If `var/chaindata` does not exist, and the `--reset-chaindata` argument is not present, the `default` snapshot will be used to create it.
 
+
+### Docker Deployment
+
+``` docker build -t YourName/testchain:v1 . ```
+
+``` docker run -it --rm --network=host YourName/testchain:v1 yarn launch ```
+
+
 ### Options
 
 * `-s, --snapshot`: Optional. This should match the name of a folder under the `snapshots` folder. This will be copied to `var/chaindata`, overwriting anything there.
