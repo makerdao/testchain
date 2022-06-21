@@ -52,12 +52,80 @@ function deploy_scd {
   # Fix sai deploy scripts (deploy and deploy-fab)
   sed_inplace '13s/DSToken.*/WETH9)/' $LIB/sai/bin/deploy
   sed_inplace 's/=0x/=/g' $LIB/sai/bin/deploy 
-  sed_inplace 's/build/build --extract/g' $LIB/sai/bin/deploy 
-  sed_inplace 's/build/build --extract/g' $LIB/sai/bin/deploy-fab 
+  # sed_inplace 's/build/build --extract/g' $LIB/sai/bin/deploy 
+  # sed_inplace 's/build/build --extract/g' $LIB/sai/bin/deploy-fab 
 
   # Change sai deploy scripts to skip dapp build if SKIP_BUILD_IF_ALREADY_BUILT is set and dapp is already built
   sed_inplace 's/^dapp build$/if [[ -z "$SKIP_BUILD_IF_ALREADY_BUILT" || ( -n "$SKIP_BUILD_IF_ALREADY_BUILT" \&\& ! -f out\/SaiTop.abi ) ]]; then dapp build; fi/' $LIB/sai/bin/deploy-fab
   sed_inplace 's/^dapp build$/# dapp build/' $LIB/sai/bin/deploy
+
+  # Prebuild
+  cd $LIB/maker-otc
+  echo "building maker otc"
+  dapp update
+  dapp --use solc:0.5.12 build || true
+
+  cd $LIB/proxy-registry
+  echo "building proxy reg"
+  dapp update
+  dapp --use solc:0.5.0 build || true
+
+  cd $LIB/sai-proxy
+  echo "sap prox"
+  dapp update
+  dapp --use solc:0.4.25 build || true
+
+  cd $LIB/oasis-direct-proxy
+  echo "building oasis direct"
+  dapp update
+  dapp --use solc:0.4.25 build || true
+
+  cd $LIB/ds-token
+  # dapp update
+  echo "building ds token"
+  dapp update
+  dapp --use solc:0.4.25 build || true
+
+  cd $LIB/maker-499
+  echo "building maker 488"
+  dapp update
+  dapp --use solc:0.4.25 build || true
+
+  cd $LIB/ds-chief
+  echo "building ds chief"
+  # dapp update
+  dapp update
+  dapp --use solc:0.5.0 build || true
+
+  cd  $LIB/symbolic-voting
+  echo "building symbolic"
+  # dapp update
+  dapp update
+  dapp --use solc:0.5.0 build || true
+
+  cd $LIB/vote-proxy
+  echo "building vote proxy old"
+  # dapp update
+  dapp update
+  dapp --use solc:0.5.0 build || true
+
+  cd $LIB/line-spell
+  echo "building line spell"
+  dapp update
+  dapp update
+  dapp --use solc:0.5.12 build || true
+
+  cd $LIB/sai-cagefree
+  # dapp update
+  echo "building cagefree"
+  dapp update
+  dapp --use solc:0.5.15 build || true
+
+  cd $LIB/sai
+  # dapp update
+  echo "building SAI"
+  dapp update
+  dapp --use solc:0.4.25 build --optimize || true
 
   ############################
   # build sai
@@ -85,11 +153,12 @@ function deploy_scd {
 
   export SOLC_FLAGS=${SOLC_FLAGS:-"--optimize"}
   cd $LIB/maker-otc
-  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/MatchingMarket.abi ]; then
+   # if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/MatchingMarket.abi ]; then
+  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
     echo "Skipping dapp build for maker-otc (already built)"
   else
     echo "Building maker-otc..."
-    dapp --use solc:0.5.12 build --extract
+    dapp --use solc:0.5.12 build
   fi
   echo "Deploying maker-otc (MatchingMarket)..."
   OTC=$(dapp create MatchingMarket 1893459661) # This is some random date in 2030
@@ -99,11 +168,11 @@ function deploy_scd {
   # build proxy registry
 
   cd $LIB/proxy-registry
-  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ] && [ -f out/ProxyRegistry.abi ]; then
+  if [ -n "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
     echo "Skipping dapp build for proxy-registry (already built)"
   else
     echo "Building proxy-registry..."
-    dapp --use solc:0.5.0 build --extract
+    dapp --use solc:0.5.0 build
   fi
   echo "Deploying ProxyRegistry and DSProxyFactory..."
   DS_PROXY_FACTORY=$(dapp create DSProxyFactory)
@@ -126,7 +195,7 @@ function deploy_scd {
     echo "Skipping dapp build for sai-proxy (already built)"
   else
     echo "Building sai-proxy..."
-    dapp --use solc:0.4.25 build  --extract
+    dapp --use solc:0.4.25 build
   fi
   echo "Deploying sai-proxy (SaiProxyCreateAndExecute)..."
   SAI_PROXY=$(dapp create SaiProxyCreateAndExecute)
@@ -141,7 +210,7 @@ function deploy_scd {
     echo "Skipping dapp build for oasis-direct-proxy (already built)"
   else
     echo "Building oasis-direct-proxy..."
-    dapp --use solc:0.4.25 build --extract
+    dapp --use solc:0.4.25 build
   fi
   echo "Deploying oasis-direct-proxy (ProxyCreationAndExecute)..."
   SAI_GEM=$(cat $OUT/addresses.json | jq --raw-output '.GEM')
@@ -156,7 +225,7 @@ function deploy_scd {
   cd $LIB/ds-token
   dapp update
   echo "Building old MKR token..."
-  dapp --use solc:0.4.25 build --extract
+  dapp --use solc:0.4.25 build
   echo "Deploying old MKR token..."
   OLD_MKR=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'OLD_MKR')))
   echo "Deployed old MKR to $OLD_MKR"
@@ -168,7 +237,7 @@ function deploy_scd {
     echo "Skipping dapp build for MKR redeemer (already built)"
   else
     echo "Building MKR redeemer..."
-    dapp --use solc:0.4.25 build --extract
+    dapp --use solc:0.4.25 build
   fi
   echo "Deploying MKR redeemer..."
   REDEEMER=$(dapp create Redeemer $OLD_MKR $SAI_GOV $(seth --to-hex 2000000000))
@@ -180,7 +249,7 @@ function deploy_scd {
 
   cd $LIB/ds-chief
   dapp update
-  dapp --use solc:0.5.0 build --extract
+  dapp --use solc:0.5.0 build
   export SETH_ASYNC=yes
   test -z $OLD_IOU && IOUtx=$(dapp create DSToken $(seth --to-bytes32 $(seth --from-ascii 'IOU')))
   export SETH_ASYNC=no
@@ -195,7 +264,7 @@ function deploy_scd {
 
   cd  $LIB/symbolic-voting
   dapp update
-  dapp --use solc:0.5.0 build --extract
+  dapp --use solc:0.5.0 build
 
   # The polling contract is deployed twice to represent
   # the legacy polling contract
@@ -208,7 +277,7 @@ function deploy_scd {
 
   cd $LIB/vote-proxy
   dapp update
-  dapp --use solc:0.5.0 build --extract
+  dapp --use solc:0.5.0 build
   OLD_VOTE_PROXY_FACTORY=$(dapp create VoteProxyFactory $OLD_CHIEF)
   cd -
 
@@ -227,7 +296,7 @@ function deploy_scd {
 
   cd $LIB/line-spell
   dapp update
-  dapp --use solc:0.5.12 build --extract
+  dapp --use solc:0.5.12 build
   LINE_SPELL=$(dapp create LineSpell $PAUSE $PLAN $VAT $ILK $LINE)
   cd -
 
@@ -236,12 +305,69 @@ function deploy_scd {
 
   cd $LIB/sai-cagefree
   dapp update
-  dapp --use solc:0.5.15 build --extract
+  dapp --use solc:0.5.15 build
   CAGEFREE=$(dapp create CageFree $SAI_TAP $SAI_GEM)
   cd -
 
   ############################
   # copy contract abis and addresses
+
+  # Rebuild each contract with --extract flag to get the ABIs we need
+  # The --extract flag causes the script to exit, adding "|| true" allows us to keep going.
+  cd $LIB/maker-otc
+  echo "building maker otc"
+  dapp --use solc:0.5.12 build --extract || true
+
+  cd $LIB/proxy-registry
+  echo "building proxy reg"
+  dapp --use solc:0.5.0 build --extract || true
+
+  cd $LIB/sai-proxy
+  echo "sap prox"
+  dapp --use solc:0.4.25 build --extract || true
+
+  cd $LIB/oasis-direct-proxy
+  echo "building oasis direct"
+  dapp --use solc:0.4.25 build --extract || true
+
+  cd $LIB/ds-token
+  # dapp update
+  echo "building ds token"
+  dapp --use solc:0.4.25 build --extract || true
+
+  cd $LIB/maker-499
+  echo "building maker 488"
+  dapp --use solc:0.4.25 build --extract || true
+
+  cd $LIB/ds-chief
+  echo "building ds chief"
+  # dapp update
+  dapp --use solc:0.5.0 build --extract || true
+
+  cd  $LIB/symbolic-voting
+  echo "building symbolic"
+  # dapp update
+  dapp --use solc:0.5.0 build --extract || true
+
+  cd $LIB/vote-proxy
+  echo "building vote proxy old"
+  # dapp update
+  dapp --use solc:0.5.0 build --extract || true
+
+  cd $LIB/line-spell
+  echo "building line spell"
+  dapp update
+  dapp --use solc:0.5.12 build --extract || true
+
+  cd $LIB/sai-cagefree
+  # dapp update
+  echo "building cagefree"
+  dapp --use solc:0.5.15 build --extract || true
+
+  cd $LIB/sai
+  # dapp update
+  echo "building SAI"
+  dapp --use solc:0.4.25 build --extract || true
 
   mkdir -p $OUT
   write_json_scd "$OUT/addresses.json"
