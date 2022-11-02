@@ -35,7 +35,7 @@ function deploy_mcd_dds {
 
   # submodule contracts are deprecated; this nix command
   # installs all necessary dependencies
-  ETH_RPC_URL="http://localhost:2000" nix run -f ./ -c dss-deploy testchain
+  ETH_RPC_URL="http://localhost:2000" nix run --show-trace -f ./ -c dss-deploy testchain
 
   # Copy addresses and abis
   jq -S . $DDS/out/addresses.json > $OUT/addresses-mcd.json
